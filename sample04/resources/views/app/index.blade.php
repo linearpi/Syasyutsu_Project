@@ -18,7 +18,7 @@
 		<th>ページ一覧</th>
 	</thead>
 	<tbody>
-		<tr><td><a href='/post'>投稿ページ</a></td></tr>
+		<tr><td><a href='/search'>検索ページ</a></td></tr>
 	</tbody>
 </table>
 @endsection
