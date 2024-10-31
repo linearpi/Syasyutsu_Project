@@ -15,7 +15,7 @@
 </head>
 <body>
     <div class="container">
-        <table class="rwd-table">
+        <table class="rwd-table" border="1">
             <thead>
                 <th colspan="8">
                     <a href="{{ route('export') }}" class="btn btn-success">Export CSV</a>
@@ -41,15 +41,8 @@
                     <td>{{ $list->phone }}</td>
                     <td>{{ $list->date_of_birth }}</td>
                     <td>{{ $list->gender }}</td>
-                    <td>
-                        <ul>
-                            @foreach (json_decode($list->skills) as $skills)
-                                <li>
-                                    {{ $skills }}
-                                </li>
-                            @endforeach
-                        </ul>
-                    </td>
+                    <td>{{ $list->skills }}</td>
+
                     <td>{{ $list->basic_salary }}</td>
                 </tr>
                 @endforeach

@@ -37,5 +37,6 @@ Route::post('/response','App\Http\Controllers\Downloader@response');
 
 /********************CSVサンプル*********************/
 Route::resource('employee', EmployeeController::class);
+Route::get('employee2','App\Http\Controllers\EmployeeController@index2');
 Route::get('export-csv', [EmployeeController::class, 'exportCSV'])->name('export');
 Route::post('import-csv', [EmployeeController::class, 'importCSV'])->name('import');

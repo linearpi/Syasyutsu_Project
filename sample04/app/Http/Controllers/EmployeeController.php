@@ -9,8 +9,10 @@ class EmployeeController extends Controller
 {
     public function index()
     {
+        
         $employees = Employee::paginate(10);
         return view('index', compact('employees'));
+        
     }
 
     public function exportCSV()
@@ -65,6 +67,12 @@ class EmployeeController extends Controller
             // Close CSV file handle
             fclose($handle);
         }, 200, $headers);
+    }
+
+    public function index2()
+    {
+        //$employees = Employee::paginate(10);
+        return view('csvimport');
     }
 
     public function importCSV(Request $request)
