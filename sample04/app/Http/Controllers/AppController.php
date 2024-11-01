@@ -93,16 +93,24 @@ class AppController extends Controller
 
 	public function search_range(Request $request)
 	{
-		$logs = Sample_log::whereBetween('created_at',[$request->q1,$request->q2])->get();
+		//期間を設定
+		$old_period = $request->q1."T00:00";
+		$new_period = $request->q2."T23:59";
+		
+		//データを検索
+		$logs = Sample_log::whereBetween('created_at',[$old_period,$new_period])->get();
 
 
+		//クライアントへ送信するデータをまとめる
 		$data = array(
 			"method" 	=> 	$request->method,
 			"q"		=>	$request->q1." | ".$request->q2,
 			"logs"		=>	$logs,
 		);
 
+		//クライアントへ送信する＆検索結果へリダイレクトする
 		return view('app/result',$data);
+
 	}
 
 	public function search_judgment(Request $request)

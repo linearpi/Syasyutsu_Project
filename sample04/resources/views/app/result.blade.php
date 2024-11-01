@@ -13,10 +13,11 @@
 <p>query：{{$q}}</p>
 
 
-<form action="/test" method="post">
+<form action="{{ route('export') }}" method="get">
 @csrf
 	<fieldset>
-	<input type="hidden" name="test" value="test-message">
+	<input type="hidden" name="method" value="{{ $method }}" >
+	<input type="hidden" name="q" value="{{ $q }}" >
 	<label>検索結果をダウンロード
 	<input type="submit" value="ダウンロード">
 	</label>
