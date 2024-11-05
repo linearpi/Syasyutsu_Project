@@ -38,7 +38,7 @@ class Downloader extends Controller
 	}
 
 	//csvファイルをエクスポート
-    public function exportCSV()
+    public function exportCSV(Request  $request)
     {
 		//テーブル内のデータを取得
 		$sample_logs = Sample_log::all();
@@ -53,7 +53,7 @@ class Downloader extends Controller
             'Expires' => '0',
         ];
     
-        return response()->stream(function () {
+        return response()->stream(function () use ($request) {
             $handle = fopen('php://output', 'w');
     
             // Add CSV headers
@@ -68,7 +68,8 @@ class Downloader extends Controller
             ]);
     
              // Fetch and process data in chunks
-            Sample_log::chunk(25, function ($sample_logs) use ($handle) {
+             //　日付検索を実施し、そのデータをCSVファイルに書き込んでいる
+            Sample_log::whereDate('created_at',$request->q)->chunk(25, function ($sample_logs) use ($handle) {
                 foreach ($sample_logs as $sample_log) {
              // Extract data from each employee.
                     $data = [

@@ -13,7 +13,7 @@
 <p>query：{{$q}}</p>
 
 
-<form action="{{ route('export') }}" method="get">
+<form action="{{ route('export',['q'=>$q]) }}" method="get">
 @csrf
 	<fieldset>
 	<input type="hidden" name="method" value="{{ $method }}" >
