@@ -40,8 +40,6 @@ class Downloader extends Controller
 	//csvファイルをエクスポート
     public function exportCSV(Request  $request)
     {
-		//テーブル内のデータを取得
-		$sample_logs = Sample_log::all();
 
         $filename = 'sample_log-data.csv';
     
@@ -53,7 +51,7 @@ class Downloader extends Controller
             'Expires' => '0',
         ];
     
-        return response()->stream(function () use ($request) {
+        $callback = function () use ($request) {
             $handle = fopen('php://output', 'w');
     
             // Add CSV headers
@@ -69,27 +67,101 @@ class Downloader extends Controller
     
              // Fetch and process data in chunks
              //　日付検索を実施し、そのデータをCSVファイルに書き込んでいる
-            Sample_log::whereDate('created_at',$request->q)->chunk(25, function ($sample_logs) use ($handle) {
-                foreach ($sample_logs as $sample_log) {
-             // Extract data from each employee.
-                    $data = [
-                        isset($sample_log->id)? $sample_log->id : '',
-                        isset($sample_log->name)? $sample_log->name : '',
-                        isset($sample_log->width)? $sample_log->width : '',
-                        isset($sample_log->height)? $sample_log->height : '',
-                        isset($sample_log->judgment)? $sample_log->judgment : '',
-                        isset($sample_log->created_at)? $sample_log->created_at : '',
-                        isset($sample_log->updated_at)? $sample_log->updated_at : '',
-                    ];
-    
-             // Write data to a CSV file.
-                    fputcsv($handle, $data);
-                }
-            });
+            if($request->method === "all"){
+                Sample_log::chunk(25, function ($sample_logs) use ($handle) {
+                    foreach ($sample_logs as $sample_log) {
+                 // Extract data from each employee.
+                        $data = [
+                            isset($sample_log->id)? $sample_log->id : '',
+                            isset($sample_log->name)? $sample_log->name : '',
+                            isset($sample_log->width)? $sample_log->width : '',
+                            isset($sample_log->height)? $sample_log->height : '',
+                            isset($sample_log->judgment)? $sample_log->judgment : '',
+                            isset($sample_log->created_at)? $sample_log->created_at : '',
+                            isset($sample_log->updated_at)? $sample_log->updated_at : '',
+                        ];
+        
+                 // Write data to a CSV file.
+                        fputcsv($handle, $data);
+                    }
+                });
+            }else if($request->method === "date"){
+                Sample_log::whereDate('created_at',$request->q)->chunk(25, function ($sample_logs) use ($handle) {
+                    foreach ($sample_logs as $sample_log) {
+                 // Extract data from each employee.
+                        $data = [
+                            isset($sample_log->id)? $sample_log->id : '',
+                            isset($sample_log->name)? $sample_log->name : '',
+                            isset($sample_log->width)? $sample_log->width : '',
+                            isset($sample_log->height)? $sample_log->height : '',
+                            isset($sample_log->judgment)? $sample_log->judgment : '',
+                            isset($sample_log->created_at)? $sample_log->created_at : '',
+                            isset($sample_log->updated_at)? $sample_log->updated_at : '',
+                        ];
+        
+                 // Write data to a CSV file.
+                        fputcsv($handle, $data);
+                    }
+                });
+            }else if($request->method === "range"){
+
+                //期間を設定
+                $old_period = $request->q1." 00:00:00";
+                $new_period = $request->q2." 23:59:59";
+
+                Sample_log::whereBetween('created_at',[$old_period,$new_period])->chunk(25, function ($sample_logs) use ($handle) {
+
+                    foreach ($sample_logs as $sample_log) {
+                        // Extract data from each employee.
+                        $data = [
+                            isset($sample_log->id)? $sample_log->id : '',
+                            isset($sample_log->name)? $sample_log->name : '',
+                            isset($sample_log->width)? $sample_log->width : '',
+                            isset($sample_log->height)? $sample_log->height : '',
+                            isset($sample_log->judgment)? $sample_log->judgment : '',
+                            isset($sample_log->created_at)? $sample_log->created_at : '',
+                            isset($sample_log->updated_at)? $sample_log->updated_at : '',
+                        ];
+        
+                        // Write data to a CSV file.
+                        fputcsv($handle, $data);
+                    }
+                });
+            }else if($request->method === "judgment"){
+                Sample_log::where('judgment',$request->q)->chunk(25, function ($sample_logs) use ($handle) {
+                    foreach ($sample_logs as $sample_log) {
+                 // Extract data from each employee.
+                        $data = [
+                            isset($sample_log->id)? $sample_log->id : '',
+                            isset($sample_log->name)? $sample_log->name : '',
+                            isset($sample_log->width)? $sample_log->width : '',
+                            isset($sample_log->height)? $sample_log->height : '',
+                            isset($sample_log->judgment)? $sample_log->judgment : '',
+                            isset($sample_log->created_at)? $sample_log->created_at : '',
+                            isset($sample_log->updated_at)? $sample_log->updated_at : '',
+                        ];
+        
+                 // Write data to a CSV file.
+                        fputcsv($handle, $data);
+                    }
+                });
+            }else{
+                fputcsv($handle, [
+                    'id',
+                    'name',
+                    'width',
+                    'height',
+                    'judgment',
+                    'created_at',
+                    'updated_at',
+                ]);
+            }
     
             // Close CSV file handle
             fclose($handle);
-        }, 200, $headers);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }	
 
 

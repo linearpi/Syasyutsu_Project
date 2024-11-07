@@ -8,7 +8,7 @@
 
 <table border="1">
 <tr>
-	<th>全部取得</th>
+	<th>全期間検索</th>
 	<td>
 	<form action="/search/all" method="POST">
 	@csrf
@@ -20,7 +20,7 @@
 </tr>
 
 <tr>
-	<th>日付選択</th>
+	<th>日付検索</th>
 	<td>
 	<form action="/search/date" method="POST">
 	@csrf
@@ -32,7 +32,7 @@
 </tr>
 
 <tr>
-	<th>日付範囲選択</th>
+	<th>期間検索</th>
 	<td>
 	<form action="/search/range" method="POST">
 	@csrf
@@ -45,7 +45,7 @@
 </tr>
 
 <tr>
-	<th>良品・不良品選択</th>
+	<th>良品・不良品検索</th>
 	<td>
 	<form action="/search/judgment" method="POST">
 	@csrf
