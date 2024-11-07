@@ -16,6 +16,10 @@
 	@yield('errors')
 </div>
 
+<div class="head-links">
+    @yield('head-links')  
+</div>
+
 <div class="content1">
     @yield('content1')
 </div>
@@ -23,6 +27,10 @@
 
 <div class="content2">
     @yield('content2')
+</div>
+
+<div class="bottom-links">
+    @yield('bottom-links')  
 </div>
 
 <div class="footer">

@@ -5,19 +5,32 @@
 @section('heading','検索結果')
 
 
-
+@section('head-links')
+<a href='/search'>検索ページへ戻る</a>
+<br>
+<a href='/index'>インデックスページへ戻る</a>
+@endsection
 
 @section('content1')
 
 <p>method：{{$method}}</p>
-<p>query：{{$q}}</p>
+@if($method == "range")
+	<p>query：{{$q1}} ~ {{$q2}}</p>
+@else
+	<p>query：{{$q}}</p>
+@endif
 
 
-<form action="{{ route('export',['q'=>$q]) }}" method="get">
+<form action="{{ route('export') }}" method="get">
 @csrf
 	<fieldset>
 	<input type="hidden" name="method" value="{{ $method }}" >
+@if($method == "range")
+	<input type="hidden" name="q1" value="{{ $q1 }}" >
+	<input type="hidden" name="q2" value="{{ $q2 }}" >
+@else
 	<input type="hidden" name="q" value="{{ $q }}" >
+@endif
 	<label>検索結果をダウンロード
 	<input type="submit" value="ダウンロード">
 	</label>
@@ -33,6 +46,7 @@
 		<th>ヨコ幅</th>
 		<th>タテ幅</th>
 		<th>判定</th>
+		<th>作成日</th>
 	</tr>
 	</thead>
 
@@ -60,7 +74,9 @@
 @endsection
 
 
-@section('content2')
-<a href='/search'>検索ページ</a>
-<a href='/index'>インデックスページ</a>
+@section('bottom-links')
+<hr>
+<a href='/search'>検索ページへ戻る</a>
+<br>
+<a href='/index'>インデックスページへ戻る</a>
 @endsection

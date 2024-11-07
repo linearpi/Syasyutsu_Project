@@ -104,7 +104,8 @@ class AppController extends Controller
 		//クライアントへ送信するデータをまとめる
 		$data = array(
 			"method" 	=> 	$request->method,
-			"q"		=>	$request->q1." | ".$request->q2,
+			"q1"		=>	$request->q1,
+			"q2"		=>	$request->q2,
 			"logs"		=>	$logs,
 		);
 
