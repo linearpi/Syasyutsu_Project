@@ -165,4 +165,41 @@ class Downloader extends Controller
     }	
 
 
+    // public function exportIMAGE(Request $request){
+    //     //$image_name = $request->name;
+    //     $image_name = "image.jpg";
+    //     $headers	=	['Content-Type' => 'image/jpeg'];
+
+    //     $callback = function() use($image_name){
+            
+    //         $remoteURL = "http://192.168.11.13/".$image_name;  
+            
+    //         $image = file_get_contents($remoteURL);
+
+    //     };
+
+
+    //     return response()->stream($callback,200,$headers);
+        
+    // }
+
+    public function exportIMAGE(Request $request){
+        $image_name = $request->name_sample.".jpg";
+        //$image_name = $request->name.".jpg";
+        $headers	=	['Content-Type' => 'image/jpeg'];
+
+        $remoteURL = "http://192.168.11.13/".$image_name;  
+        $localPath = "/home/j2321310/pictures/" . $image_name;
+        
+        //画像取得
+        $image = file_get_contents($remoteURL);
+
+        //画像保存
+        file_put_contents($localPath.$image_name,$image);
+
+        return response()->download($localPath,$image_name);
+        //return response()->file($localPath.$image_name,$headers);
+        
+    }
+
 }

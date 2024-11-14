@@ -21,7 +21,7 @@
 @endif
 
 
-<form action="{{ route('export') }}" method="get">
+<form action="{{ route('export/csv') }}" method="get">
 @csrf
 	<fieldset>
 	<input type="hidden" name="method" value="{{ $method }}" >
@@ -65,6 +65,13 @@
 		<td>{{$log["height"]}}</td>
 		<td>{{$log["judgment"]}}</td>
 		<td>{{$log["created_at"]}}</td>
+		<td>
+			<form method="get" action="{{ route('export/image') }}">
+				<input type="hidden" name="name" value="{{ $log['name'] }}" />
+				<input type="hidden" name="name_sample" value="image" />
+				<input type="submit"  value="画像ダウンロード" />
+			</form>
+		</td>
 	</tr>
 @endforeach
 @endif

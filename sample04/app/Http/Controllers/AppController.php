@@ -43,11 +43,11 @@ class AppController extends Controller
 
 		//リクエストから各データを取り出し、インスタンスに追加する。
 		$log = new Sample_log;	
-    		$log->name = $imageName;
+    	$log->name = $imageName;
 		$log->path = $folder_path.'/'.$imageName;
-    		$log->description = $request->description;
-    		$log->judgment = $request->judgment;
-    		$log->save();
+    	$log->description = $request->description;
+    	$log->judgment = $request->judgment;
+    	$log->save();
 
 		$datas = array(
 			'isSent'	=>	true,

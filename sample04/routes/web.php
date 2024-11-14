@@ -32,12 +32,6 @@ Route::post('search/judgment','App\Http\Controllers\AppController@search_judgmen
 Route::post('/download','App\Http\Controllers\Downloader@download');
 Route::post('/response','App\Http\Controllers\Downloader@response');
 
-Route::get('export-csv', [Downloader::class, 'exportCSV'])->name('export');
+Route::get('export-csv', [Downloader::class, 'exportCSV'])->name('export/csv');
 
-//Route::post('/test','App\Http\Controllers\Downloader@test');
-
-/********************CSVサンプル*********************/
-// Route::resource('employee', EmployeeController::class);
-// Route::get('employee2','App\Http\Controllers\EmployeeController@index2');
-// Route::get('export-csv', [EmployeeController::class, 'exportCSV'])->name('export');
-// Route::post('import-csv', [EmployeeController::class, 'importCSV'])->name('import');
+Route::get('export-image', [Downloader::class, 'exportIMAGE'])->name('export/image');
