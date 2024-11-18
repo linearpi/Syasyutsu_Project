@@ -42,7 +42,8 @@
 	<thead>
 	<tr>
 		<th>番号</th>
-		<th>名前</th>
+		<th>画像名</th>
+		<th>パラメータ名</th>
 		<th>ヨコ幅</th>
 		<th>タテ幅</th>
 		<th>判定</th>
@@ -61,14 +62,14 @@
 	<tr>
 		<td>{{$log["id"]}}</td>
 		<td>{{$log["name"]}}</td>
+		<td>{{$log["parameta_name"]}}</td>
 		<td>{{$log["width"]}}</td>
 		<td>{{$log["height"]}}</td>
 		<td>{{$log["judgment"]}}</td>
 		<td>{{$log["created_at"]}}</td>
 		<td>
 			<form method="get" action="{{ route('export/image') }}">
-				<input type="hidden" name="name" value="{{ $log['name'] }}" />
-				<input type="hidden" name="name_sample" value="image" />
+				<input type="hidden" name="log" value="{{ $log }}" />
 				<input type="submit"  value="画像ダウンロード" />
 			</form>
 		</td>

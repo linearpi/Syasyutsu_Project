@@ -32,6 +32,10 @@ Route::post('search/judgment','App\Http\Controllers\AppController@search_judgmen
 Route::post('/download','App\Http\Controllers\Downloader@download');
 Route::post('/response','App\Http\Controllers\Downloader@response');
 
+Route::get('/test','App\Http\Controllers\AppController@test');
+
+Route::get('/surv','App\Http\Controllers\AppController@');
+
 Route::get('export-csv', [Downloader::class, 'exportCSV'])->name('export/csv');
 
 Route::get('export-image', [Downloader::class, 'exportIMAGE'])->name('export/image');

@@ -130,7 +130,21 @@ class AppController extends Controller
 	
 	public function test(Request $request) 
 	{
-		return $request;
+
+		$command = "python3 hello.py";
+		//$command = "pwd";
+		$output = [];
+
+		//$output = shell_exec($command);
+		exec($command,$output);
+
+		$items = [
+			"1" => $output,
+			//"2" => $output[1],
+		];
+
+		return $output;
 	}
+
 
 }
