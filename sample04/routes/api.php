@@ -9,4 +9,4 @@ Route::get('/user', function (Request $request) {
 
 
 //Route::post('/test','App\Http\Controllers\Downloader@test');
-Route::get('/test','App\Http\Controllers\Downloader@test');
+//Route::get('/test','App\Http\Controllers\Downloader@test');

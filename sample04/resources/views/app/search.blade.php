@@ -4,6 +4,16 @@
 
 @section('heading','検索ページ')
 
+
+@section('errors')
+	@if($errors->has('q'))
+		<h3>error:条件が未定です</h3>
+	@endif
+	@if($errors->has('q1') || $errors->has('q2'))
+		<h3>error:範囲が未定です</h3>
+	@endif
+@endsection
+
 @section('content1')
 
 <table border="1">
@@ -20,12 +30,24 @@
 </tr>
 
 <tr>
+	<th>パラメータ名検索</th>
+	<td>
+	<form action="/search/paraName" method="POST">
+	@csrf
+		<input type="hidden" name="method" value="paraName" />
+		<input type="text" value="" name="q"/>
+		<input type="submit" value="送信" />
+	</form>
+	</td>
+</tr>
+
+<tr>
 	<th>日付検索</th>
 	<td>
 	<form action="/search/date" method="POST">
 	@csrf
 		<input type="hidden" name="method" value="date" />
-		<input type="date" name="q"/>
+		<input type="date" value="" name="q"/>
 		<input type="submit" value="送信" />
 	</form>
 	</td>
