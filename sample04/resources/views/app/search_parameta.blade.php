@@ -20,7 +20,7 @@
 <tr>
 	<th>全期間検索</th>
 	<td>
-	<form action="/search/all" method="GET">
+	<form action="/search/parameta/all" method="GET">
 	@csrf
 		<input type="hidden" name="method" value="all" />
 		<input type="hidden" name="q" value="all" />
@@ -32,9 +32,9 @@
 <tr>
 	<th>パラメータ名検索</th>
 	<td>
-	<form action="/search/paraName" method="GET">
+	<form action="/search/parameta/name" method="GET">
 	@csrf
-		<input type="hidden" name="method" value="paraName" />
+		<input type="hidden" name="method" value="name" />
 		<input type="text" value="" name="q"/>
 		<input type="submit" value="送信" />
 	</form>
@@ -44,7 +44,7 @@
 <tr>
 	<th>日付検索</th>
 	<td>
-	<form action="/search/date" method="GET">
+	<form action="/search/parameta/date" method="POST">
 	@csrf
 		<input type="hidden" name="method" value="date" />
 		<input type="date" value="" name="q"/>
@@ -53,33 +53,6 @@
 	</td>
 </tr>
 
-<tr>
-	<th>期間検索</th>
-	<td>
-	<form action="/search/range" method="GET">
-	@csrf
-		<input type="hidden" name="method" value="range" />
-		<input type="date" name="q1" />
-		<input type="date" name="q2" />
-		<input type="submit" value="送信" />
-	</form>
-	</td>
-</tr>
-
-<tr>
-	<th>良品・不良品検索</th>
-	<td>
-	<form action="/search/judgment" method="GET">
-	@csrf
-		<input type="hidden" name="method" value="judgment" />
-		<label for="good"> 良品</label>
-		<input type="radio" name="q" id="good" value="good"/>
-
-		<label for="bad"> 不良品</label>
-		<input type="radio" name="q" id="bad" value="bad"/>
-		<input type="submit" value="送信" />
-	</form>
-</tr>
 </table>
 @endsection
 

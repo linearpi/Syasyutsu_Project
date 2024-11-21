@@ -18,14 +18,20 @@ Route::get('index','App\Http\Controllers\AppController@index');
 Route::get('/search',function(){
 	return view('app/search');
 });
+Route::get('/search/parameta',function(){
+	return view('app/search_parameta');
+});
 
 
 /* 検索結果ページ */
-Route::post('search/all','App\Http\Controllers\AppController@search_all');
-Route::post('search/paraName','App\Http\Controllers\AppController@search_paraName');
-Route::post('search/date','App\Http\Controllers\AppController@search_date');
-Route::post('search/range','App\Http\Controllers\AppController@search_range');
-Route::post('search/judgment','App\Http\Controllers\AppController@search_judgment');
+Route::get('/search/all','App\Http\Controllers\AppController@search_all');
+Route::get('/search/paraName','App\Http\Controllers\AppController@search_paraName');
+Route::get('/search/date','App\Http\Controllers\AppController@search_date');
+Route::get('/search/range','App\Http\Controllers\AppController@search_range');
+Route::get('/search/judgment','App\Http\Controllers\AppController@search_judgment');
+
+Route::get('/search/parameta/all','App\Http\Controllers\ParametaController@search_all');
+Route::get('/search/parameta/name','App\Http\Controllers\ParametaController@search_name');
 
 
 Route::get('/test','App\Http\Controllers\AppController@test');

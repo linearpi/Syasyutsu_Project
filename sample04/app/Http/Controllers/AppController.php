@@ -10,8 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class AppController extends Controller
 {
-	protected static $before_login;
-	protected static $now_login;
+
     //
 	public function index(){	
 		return view('app/index');
@@ -54,7 +53,6 @@ class AppController extends Controller
 		);
 
 		return view('app/result',$data);
-		//return $data;
 	}
 
 	public function search_date(Request $request)
@@ -125,23 +123,6 @@ class AppController extends Controller
 		return view('app/result',$data);
 	}
 	
-	public function monitor(Request $request) 
-	{
-
-		$command = "python3 hello.py";
-		//$command = "pwd";
-		$output = [];
-
-		//$output = shell_exec($command);
-		exec($command,$output);
-
-		$items = [
-			"1" => $output,
-			//"2" => $output[1],
-		];
-
-		return $output;
-	}
 
 
 }

@@ -20,7 +20,7 @@
 	<tbody>
 		<tr>
 			<td><a href='/search'>移動する</a></td>
-			<td><a href='/search'>移動する</a></td>
+			<td><a href='/search/parameta'>移動する</a></td>
 		</tr>
 	</tbody>
 </table>
