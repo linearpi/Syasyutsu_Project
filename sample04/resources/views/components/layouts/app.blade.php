@@ -7,7 +7,6 @@
         <title>{{ $title ?? 'Page Title' }}</title>
     </head>
     <body>
-        <h1>Hello World</h1>
         <!-- counter.blade.phpで定義したアプリが動作する。 -->
         {{ $slot }}
     </body>
