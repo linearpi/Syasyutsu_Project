@@ -1,20 +1,27 @@
 @extends('layouts.base')
 
-@section('title','検索結果ページ')
+@section('title','パラメータ検索結果')
 
-@section('heading','検索結果')
+@section('heading','パラメータ　検索結果')
 
 
 @section('head-links')
-<a href='/search'>検索ページへ戻る</a>
+<a href='/search/parameta'>検索ページへ戻る</a>
 <br>
-<a href='/index'>インデックスページへ戻る</a>
+<a href='/index'>トップページへ戻る</a>
 @endsection
 
 @section('content1')
 
-<p>method：{{$method}}</p>
-<p>query：{{$q}}</p>
+@switch($method)
+	@case("all")
+		<p>検索：全期間検索</p>
+	@break
+	@case("paraName")
+		<p>検索：パラメータ名検索</p>
+		<p>内容：{{$q}}</p>
+	@break
+@endswitch
 
 
 <form action="{{ route('export/csv') }}" method="get">
@@ -43,6 +50,8 @@
 		<th>max</th>
 		<th>bs</th>
 		<th>iteration</th>
+		<th>作成日</th>
+		<th>ACTIVE</th>
 		<th>ログ検索</th>
 	</tr>
 	</thead>
@@ -50,7 +59,7 @@
 	<tbody>
 @if(!isset($parametas[0]))
 	<tr>
-		<td colspan="5">NO DATA EXISTS!!</td>
+		<td colspan="9">NO DATA EXISTS!!</td>
 	</tr>
 
 @else
@@ -62,9 +71,17 @@
 		<td>{{$parameta["max"]}}</td>
 		<td>{{$parameta["bs"]}}</td>
 		<td>{{$parameta["iteration"]}}</td>
+		<td>{{$parameta["created_at"]}}</td>
+		<td>
+			@if($parameta["active"] == null)
+				<p style="color: blue">INACTIVE</p>
+			@else
+				<p style="color: red">ACTIVE</p>
+			@endif
+		</td>
 		<td>
 			<form method="get" action="/search/paraName">
-				<input type="hidden" name="method" value="{{ $method }}" />
+				<input type="hidden" name="method" value="paraName" />
 				<input type="hidden" name="q" value="{{ $parameta['name'] }}" />
 				<input type="submit"  value="この値で検索" />
 			</form>
@@ -80,7 +97,7 @@
 
 @section('bottom-links')
 <hr>
-<a href='/search'>検索ページへ戻る</a>
+<a href='/search/parameta'>検索ページへ戻る</a>
 <br>
-<a href='/index'>インデックスページへ戻る</a>
+<a href='/index'>トップページへ戻る</a>
 @endsection

@@ -72,7 +72,6 @@ class AppController extends Controller
 		);
 
 		return view('app/result',$data);
-		//return $data;
 	}
 
 	public function search_range(Request $request)

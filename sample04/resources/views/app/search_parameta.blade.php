@@ -44,10 +44,28 @@
 <tr>
 	<th>日付検索</th>
 	<td>
-	<form action="/search/parameta/date" method="POST">
+	<form action="/search/parameta/date" method="GET">
 	@csrf
 		<input type="hidden" name="method" value="date" />
-		<input type="date" value="" name="q"/>
+		<input type="date" name="q"/>
+		<input type="submit" value="送信" />
+	</form>
+	</td>
+</tr>
+
+<tr>
+	<th>ACTIVE検索</th>
+	<td>
+	<form action="/search/parameta/active" method="GET">
+	@csrf
+		<input type="hidden" name="method" value="judgement" />
+
+		<label for="active"> ACTIVE</label>
+		<input type="radio" name="q" id="active" value="active"/>
+		
+		<label for="inactive"> INACTIVE</label>
+		<input type="radio" name="q" id="inactive" value="inactive"/>
+		
 		<input type="submit" value="送信" />
 	</form>
 	</td>

@@ -32,6 +32,8 @@ Route::get('/search/judgment','App\Http\Controllers\AppController@search_judgmen
 
 Route::get('/search/parameta/all','App\Http\Controllers\ParametaController@search_all');
 Route::get('/search/parameta/name','App\Http\Controllers\ParametaController@search_name');
+Route::get('/search/parameta/date','App\Http\Controllers\ParametaController@search_date');
+Route::get('/search/parameta/active','App\Http\Controllers\ParametaController@search_active');
 
 
 Route::get('/test','App\Http\Controllers\AppController@test');

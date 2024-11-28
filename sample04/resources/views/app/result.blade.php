@@ -1,14 +1,14 @@
 @extends('layouts.base')
 
-@section('title','検索結果ページ')
+@section('title','ログ検索結果')
 
-@section('heading','検索結果')
+@section('heading','ログ　検索結果')
 
 
 @section('head-links')
-<a href='/search'>検索ページへ戻る</a>
+<a href='/search'>ログ検索ページへ戻る</a>
 <br>
-<a href='/index'>インデックスページへ戻る</a>
+<a href='/index'>トップページへ戻る</a>
 @endsection
 
 @section('content1')
@@ -86,5 +86,5 @@
 <hr>
 <a href='/search'>検索ページへ戻る</a>
 <br>
-<a href='/index'>インデックスページへ戻る</a>
+<a href='/index'>トップページへ戻る</a>
 @endsection

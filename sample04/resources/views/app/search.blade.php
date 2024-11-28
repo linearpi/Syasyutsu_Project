@@ -1,8 +1,8 @@
 @extends('layouts.base')
 
-@section('title','検索ページ')
+@section('title','ログ　検索ページ')
 
-@section('heading','検索ページ')
+@section('heading','ログ　検索ページ')
 
 
 @section('errors')
@@ -85,5 +85,5 @@
 
 
 @section('content2')
-<a href='/index'>インデックスページ</a>
+<a href='/index'>トップページへ戻る</a>
 @endsection

@@ -43,23 +43,48 @@ class ParametaController extends Controller
 		return view('app/result_parameta',$data);
 	}
 
-	public function search_logs(Request $request){
+
+	public function search_date(Request $request)
+	{
+		
+
 		$request->validate([
 			'q' => 'required',
 			'method' => 'required',
 		]);
 
+		$parametas = Parameta::whereDate('created_at',$request->q)->get();
 
-		$logs = Sample_log::orWhere('parameta_name','like','%'.$request->q.'%')
-		->get();
 
 		$data = array(
 			"method" 	=> 	$request->method,
 			"q"		=>	$request->q,
-			"logs"		=>	$logs,
+			"parametas"		=>	$parametas,
 		);
 
-		return view('app/result',$data);
+		//return $data;
+		return view('app/result_parameta',$data);
+	}
+
+	public function search_active(Request $request){
+		$request->validate([
+			'q' => 'required',
+			'method' => 'required',
+		]);
+
+		if($request->q == 'active'){
+			$parametas = Parameta::whereNotNull('active')->get();
+		}else if($request->q == 'inactive'){
+			$parametas = Parameta::whereNull('active')->get();
+		}
+
+		$data = array(
+			"method" 	=> 	$request->method,
+			"q"		=>	$request->q,
+			"parametas"		=>	$parametas,
+		);
+
+		return view('app/result_parameta',$data);
 	}
 
 }
