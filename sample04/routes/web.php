@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\Downloader;
+
+//Livewire
+use App\Livewire\Counter;
+
 /*
 Route::get('/', function () {
     return view('welcome');
@@ -39,7 +43,9 @@ Route::get('/search/parameta/active','App\Http\Controllers\ParametaController@se
 Route::get('/test','App\Http\Controllers\AppController@test');
 
 /* システム監視ページ */
-Route::get('/monitor','App\Http\Controllers\AppController@monitor');
+Route::get('/monitor','App\Http\Controllers\MonitorController@index');
+
+Route::get('/monitor', Counter::class);
 
 
 //CSVダウンロード
