@@ -21,7 +21,8 @@ class AppController extends Controller
 	public function search_all(Request $request)
 	{
 
-		$logs = Sample_log::all();
+		//$logs = Sample_log::all();
+		$logs = Sample_log::paginate(10);
 
 
 		$data = array(
@@ -42,7 +43,7 @@ class AppController extends Controller
 
 
 		$logs = Sample_log::orWhere('parameta_name','like','%'.$request->q.'%')
-		->get();  ;
+		->paginate(10);
 
 
 
@@ -62,7 +63,7 @@ class AppController extends Controller
 			'method' => 'required',
 		]);
 
-		$logs = Sample_log::whereDate('created_at',$request->q)->get();
+		$logs = Sample_log::whereDate('created_at',$request->q)->paginate(10);
 
 
 		$data = array(
@@ -87,7 +88,7 @@ class AppController extends Controller
         $new_period = $request->q2." 23:59:59";
 		
 		//データを検索
-		$logs = Sample_log::whereBetween('created_at',[$old_period,$new_period])->get();
+		$logs = Sample_log::whereBetween('created_at',[$old_period,$new_period])->paginate(10);
 
 
 		//クライアントへ送信するデータをまとめる
@@ -110,7 +111,7 @@ class AppController extends Controller
 			'method' => 'required',
 		]);
 		
-		$logs = Sample_log::where('judgment',$request->q)->get();
+		$logs = Sample_log::where('judgment',$request->q)->paginate(10);
 
 
 		$data = array(

@@ -21,7 +21,21 @@
 		<p>検索：パラメータ名検索</p>
 		<p>内容：{{$q}}</p>
 	@break
+	@case("date")
+		<p>検索：日付検索</p>
+		<p>内容：{{$q}}</p>
+	@break
+	@case("judgment")
+		<p>検索：ACTIVE検索</p>
+		<p>内容：{{$q}}</p>
+	@break
 @endswitch
+
+
+<p>{{ $parametas->total() }}件中
+@php
+	echo count($parametas) ."件表示</p>"
+@endphp
 
 
 <form action="{{ route('export/csv') }}" method="get">
@@ -91,7 +105,7 @@
 @endif
 	</tbody>
 </table>
-
+{{ $parametas->appends(request()->query())->links()}}
 @endsection
 
 

@@ -13,7 +13,7 @@ class ParametaController extends Controller
 {
 
 	public function search_all(Request $request){
-		$parameta = Parameta::all();
+		$parameta = Parameta::paginate(10);
 
 		$data = array(
 			"method" 	=> 	$request->method,
@@ -32,7 +32,7 @@ class ParametaController extends Controller
 
 
 		$parameta = Parameta::orWhere('name','like','%'.$request->q.'%')
-		->get();  ;
+		->paginate(10);  ;
 
 		$data = array(
 			"method" 	=> 	$request->method,
@@ -53,7 +53,7 @@ class ParametaController extends Controller
 			'method' => 'required',
 		]);
 
-		$parametas = Parameta::whereDate('created_at',$request->q)->get();
+		$parametas = Parameta::whereDate('created_at',$request->q)->paginate(10);
 
 
 		$data = array(
@@ -72,11 +72,15 @@ class ParametaController extends Controller
 			'method' => 'required',
 		]);
 
-		if($request->q == 'active'){
-			$parametas = Parameta::whereNotNull('active')->get();
-		}else if($request->q == 'inactive'){
-			$parametas = Parameta::whereNull('active')->get();
-		}
+
+		$parametas = Parameta::where('active',$request->q)->paginate(10);
+
+		// if($request->q == 'active'){
+		// 	$parametas = Parameta::whereNotNull('active')->paginate(10);
+		// 	$parametas = Sample_log::where('judgment',$request->q)->paginate(10);
+		// }else if($request->q == 'inactive'){
+		// 	$parametas = Parameta::whereNull('active')->paginate(10);
+		// }
 
 		$data = array(
 			"method" 	=> 	$request->method,

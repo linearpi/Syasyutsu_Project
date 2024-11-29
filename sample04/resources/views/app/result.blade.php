@@ -13,12 +13,33 @@
 
 @section('content1')
 
-<p>method：{{$method}}</p>
-@if($method == "range")
-	<p>query：{{$q1}} ~ {{$q2}}</p>
-@else
-	<p>query：{{$q}}</p>
-@endif
+@switch($method)
+	@case("all")
+		<p>検索：全期間検索</p>
+	@break
+	@case("paraName")
+		<p>検索：パラメータ名検索</p>
+		<p>内容：{{$q}}</p>
+	@break
+	@case("date")
+		<p>検索：日付検索</p>
+		<p>内容：{{$q}}</p>
+	@break
+	@case("range")
+		<p>検索：期間検索</p>
+		<p>内容：{{$q1}} ~ {{$q2}}</p>
+	@break
+	@case("judgment")
+		<p>検索：ACTIVE検索</p>
+		<p>内容：{{$q}}</p>
+	@break
+@endswitch
+
+<p>{{ $logs->total() }}件中
+@php
+	echo count($logs) ."件表示</p>"
+@endphp
+	
 
 
 <form action="{{ route('export/csv') }}" method="get">
@@ -78,7 +99,7 @@
 @endif
 	</tbody>
 </table>
-
+{{ $logs->appends(request()->query())->links()}}
 @endsection
 
 
