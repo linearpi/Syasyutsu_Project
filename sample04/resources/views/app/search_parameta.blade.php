@@ -61,10 +61,10 @@
 		<input type="hidden" name="method" value="judgement" />
 
 		<label for="active"> ACTIVE</label>
-		<input type="radio" name="q" id="active" value="active"/>
+		<input type="radio" name="q" id="active" value="1"/>
 		
 		<label for="inactive"> INACTIVE</label>
-		<input type="radio" name="q" id="inactive" value="inactive"/>
+		<input type="radio" name="q" id="inactive" value="0"/>
 		
 		<input type="submit" value="送信" />
 	</form>
