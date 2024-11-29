@@ -38,21 +38,6 @@
 @endphp
 
 
-<form action="{{ route('export/csv') }}" method="get">
-@csrf
-	<fieldset>
-	<input type="hidden" name="method" value="{{ $method }}" >
-@if($method == "range")
-	<input type="hidden" name="q1" value="{{ $q1 }}" >
-	<input type="hidden" name="q2" value="{{ $q2 }}" >
-@else
-	<input type="hidden" name="q" value="{{ $q }}" >
-@endif
-	<label>検索結果をダウンロード
-	<input type="submit" value="ダウンロード">
-	</label>
-	</fieldset>
-</form>
 
 
 <table border="1">
