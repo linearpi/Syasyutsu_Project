@@ -141,12 +141,12 @@ class Downloader extends Controller
         $log = json_decode($request->log);
 
         //$image_name = $request->name_sample.".jpg";
-        $image_name = $log->name.".jpg";
-        $headers	=	['Content-Type' => 'image/jpeg'];
+        $image_name = $log->name.".png";
+        $headers	=	['Content-Type' => 'image/png'];
         $folder = $log->year."_".$log->month."_".$log->day;
 
         $remoteURL = "http://192.168.11.13/pictures/".$folder."/".$image_name;  
-        $savePath = "/home/j2321310/pictures/image.jpg";
+        $savePath = "/home/j2321310/pictures/image.png";
 
         $items = [
             "save-path" => $savePath,
