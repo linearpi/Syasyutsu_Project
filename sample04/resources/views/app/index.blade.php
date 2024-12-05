@@ -9,7 +9,9 @@
 		<h1>トップページ</h1>
 	</div>
 	<div class="w3-display-right">
-		<p class="w3-sans-serif">ADO&emsp;</p>
+		<a href="/" style="text-decoration:none;">
+			<p class="w3-sans-serif">ADO&emsp;</p>
+		</a>
 	</div>
 </div>
 @endsection
