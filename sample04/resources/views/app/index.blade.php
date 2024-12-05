@@ -10,7 +10,7 @@
 	</div>
 	<div class="w3-display-right">
 		<a href="/" style="text-decoration:none;">
-			<p class="w3-sans-serif">ADO&emsp;</p>
+			<p class="w3-sans-serif">LOGO&emsp;</p>
 		</a>
 	</div>
 </div>

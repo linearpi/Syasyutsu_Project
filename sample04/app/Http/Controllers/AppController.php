@@ -125,38 +125,6 @@ class AppController extends Controller
 	
 	public function test(){
 
-		$output = [];
-		$result = [];
-		$fixed = [];
-
-		//exec("python3 ./python/kvhostlink.py",$output);   //PLCとの通信		
-		exec("python3 ./python/hello2.py",$output);   //PLCとの通信		
-		
-		
-		// テスト用文字列
-		$testString = "Hello,\r\nWorld!\nThis is a test string.\r";
-		
-
-		$result = str_replace(["\\r", "\\n"], '', $output);
-		// キャリッジリターン(\r)やラインフィード(\n)を空文字に置換
-		
-		foreach ($result as $key ) {
-			if($key == "b'00001'"){
-				$fixed[] = "ON";
-			}elseif ($key == "b'00000'") {
-				$fixed[] = "OFF";
-			}else{
-				$fixed[] = "NULL";
-			}
-		}
-
-		// $data = [
-		// 	"before" => $output,
-		// 	"after" => $result,
-		// 	"fixed" => $fixed[0]
-		// ];
-				
-		return $data;
 	}
 
 }
