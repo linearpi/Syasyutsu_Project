@@ -97,7 +97,7 @@ class kvHostLink:
 kv = kvHostLink('192.168.11.4')
 data1 = kv.read('M5000.U')
 print(data1)
-data2 = kv.read('Y111.U')
+data2 = kv.read('Y117.U')
 print(data2)
 data3 = kv.read('X100.U')
 print(data3)

@@ -17,15 +17,9 @@
             <h3>ページ更新回数：{{ $count }}</h3>
             <br>
             <h2>--データ--</h2>
-        @if(!isset($datas[0]))
-            <h3>データを読み込んでいます。。。。</h3>
-        @else
-            @foreach($datas as $data)
-                <h3> >>{{ $data }}</h3>
-            @endforeach
-        @endif
 
-        @if(($count % 2 ) == 0) 
+
+        @if($data == "ON") 
             <div class="content1" style="background-image: url('../images/app/ON.jpg');">
             </div>
         @else
@@ -36,7 +30,7 @@
     </div>
 
     <div class="footer">
-        <div class="content3 w3-display-container">
+        <div class="content2 w3-display-container">
             <div class="w3-display-bottomright">
                 <p>作成日　2024/12/4(水)&emsp;</p>
             </div>
