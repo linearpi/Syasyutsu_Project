@@ -6,6 +6,8 @@
     <title>Document</title>
     <link rel="stylesheet" href="{{ asset('/css/style_result.css') }}">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
 </head>
 <body>
 
@@ -21,5 +23,7 @@
     @yield("footer")
 </div>
 
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/js/lightbox.min.js" type="text/javascript"></script>
 </body>
 </html>

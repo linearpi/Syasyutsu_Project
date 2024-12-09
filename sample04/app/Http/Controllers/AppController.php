@@ -22,7 +22,7 @@ class AppController extends Controller
 	{
 
 		//$logs = Sample_log::all();
-		$logs = Sample_log::paginate(10);
+		$logs = Sample_log::orderBy("id","desc")->paginate(10);
 
 
 		$data = array(

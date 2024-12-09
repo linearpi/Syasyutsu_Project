@@ -46,10 +46,9 @@
 	
 
 <div class="content1 w3-display-container">
-	
+	<div class="content2 w3-display-topright">
 		<form action="{{ route('export/csv') }}" method="get">
 		@csrf
-			<fieldset>
 			<input type="hidden" name="method" value="{{ $method }}" >
 		@if($method == "range")
 			<input type="hidden" name="q1" value="{{ $q1 }}" >
@@ -58,13 +57,12 @@
 			<input type="hidden" name="q" value="{{ $q }}" >
 		@endif
 			<label>検索結果をダウンロード
-			<input type="submit" value="ダウンロード">
+			<input class="download-btn" type="submit" value="CSVダウンロード">
 			</label>
-			</fieldset>
 		</form>
-
-	<div class="content2 w3-display-middle">
-		<table border="1">
+	</div>
+	<div class="content3 w3-display-middle w3-display-container">
+		<table border="1" class="w3-display-middle">
 			<thead>
 			<tr>
 				<th>番号</th>
@@ -94,9 +92,37 @@
 				<td>{{$log["judgment"]}}</td>
 				<td>{{$log["created_at"]}}</td>
 				<td>
+					<div id='{{ $log["id"] }}_img'>
+						<a href="http://192.168.11.13/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name'] }}.png" data-lightbox="abc" data-title="{{ $log['name'] }}">
+							<img src="http://192.168.11.13/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name'] }}.png" width="60px" alt="none">
+						</a>
+					</div>
+				</td>
+				<div>
+					<script>
+						function chk(url){
+							return new Promise(function (resolve, reject) {
+								const img = new Image();
+								img.src = url;
+								img.onload = function () { return resolve(url) };
+								img.onerror = function () { return reject(url) };
+							});
+						};
+
+						chk("http://192.168.11.13/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name'] }}.png")
+							.catch((url) => {
+								document.getElementById('{{ $log["id"] }}_img').innerHTML = "none";
+								document.getElementById('{{ $log["id"] }}').innerHTML = "ダウンロード不可";
+							});
+					</script>
+				</div>
+				<td>
 					<form method="get" action="{{ route('export/image') }}">
 						<input type="hidden" name="log" value="{{ $log }}" />
-						<input type="submit"  value="画像ダウンロード" />
+						<div id='{{ $log["id"] }}'>
+							<input type="submit"  value="画像ダウンロード" />
+						</div>
+						
 					</form>
 				</td>
 			</tr>
@@ -104,9 +130,10 @@
 		@endif
 			</tbody>
 		</table>
-		{{ $logs->appends(request()->query())->links()}}
+		
 	</div>
 </div>
+{{ $logs->appends(request()->query())->links()}}
 @endsection
 
 

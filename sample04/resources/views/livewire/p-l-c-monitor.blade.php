@@ -14,8 +14,7 @@
     </div>
 
     <div class="main">
-            <h3>ページ更新回数：{{ $count }}</h3>
-            <br>
+
             <h2>--データ--</h2>
 
 
@@ -43,7 +42,7 @@
         setInterval(() => {
             //Livewire内部で動作しているオブジェクトのメソッドを1000msごとに実行
             $wire.increment()
-        }, 1000)
+        }, 500)
     </script>
     @endscript
 </div>
