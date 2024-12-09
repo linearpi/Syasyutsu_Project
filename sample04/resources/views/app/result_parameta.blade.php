@@ -1,17 +1,24 @@
-@extends('layouts.base')
+@extends('layouts.base_result')
 
-@section('title','パラメータ検索結果')
+@section('title','パラメータ　検索ページ')
 
 @section('heading','パラメータ　検索結果')
 
 
-@section('head-links')
-<a href='/search/parameta'>検索ページへ戻る</a>
-<br>
-<a href='/index'>トップページへ戻る</a>
+@section('headder')
+<div class="head w3-display-container w3-teal">
+	<div class="w3-display-left">
+		<h1>ログ検索ページ</h1>
+	</div>
+	<div class="w3-display-right">
+		<a href="/" style="text-decoration:none;">
+			<p class="w3-sans-serif">LOGO&emsp;</p>
+		</a>
+	</div>
+</div>
 @endsection
 
-@section('content1')
+@section('main')
 
 @switch($method)
 	@case("all")
@@ -39,57 +46,64 @@
 
 
 
+<div class="content1 w3-display-container">
+	<div class="content3 w3-display-middle w3-display-container">
 
-<table border="1">
-	<thead>
-	<tr>
-		<th>番号</th>
-		<th>パラメータ名</th>
-		<th>thresh</th>
-		<th>max</th>
-		<th>bs</th>
-		<th>iteration</th>
-		<th>作成日</th>
-		<th>ACTIVE</th>
-		<th>ログ検索</th>
-	</tr>
-	</thead>
+	<table border="1" class="w3-display-middle">
+		<thead>
+		<tr>
+			<th>番号</th>
+			<th>パラメータ名</th>
+			<th>thresh</th>
+			<th>max</th>
+			<th>bs</th>
+			<th>iteration</th>
+			<th>作成日</th>
+			<th>ACTIVE</th>
+			<th>ログ検索</th>
+		</tr>
+		</thead>
 
-	<tbody>
-@if(!isset($parametas[0]))
-	<tr>
-		<td colspan="9">NO DATA EXISTS!!</td>
-	</tr>
+		<tbody>
+		@if(!isset($parametas[0]))
+			<tr>
+				<td colspan="9">NO DATA EXISTS!!</td>
+			</tr>
 
-@else
-@foreach($parametas as $parameta)
-	<tr>
-		<td>{{$parameta["id"]}}</td>
-		<td>{{$parameta["name"]}}</td>
-		<td>{{$parameta["thresh"]}}</td>
-		<td>{{$parameta["max"]}}</td>
-		<td>{{$parameta["bs"]}}</td>
-		<td>{{$parameta["iteration"]}}</td>
-		<td>{{$parameta["created_at"]}}</td>
-		<td>
-			@if($parameta["active"] == null)
-				<p style="color: blue">INACTIVE</p>
-			@else
-				<p style="color: red">ACTIVE</p>
-			@endif
-		</td>
-		<td>
-			<form method="get" action="/search/paraName">
-				<input type="hidden" name="method" value="paraName" />
-				<input type="hidden" name="q" value="{{ $parameta['name'] }}" />
-				<input type="submit"  value="この値で検索" />
-			</form>
-		</td>
-	</tr>
-@endforeach
-@endif
-	</tbody>
-</table>
+		@else
+		@foreach($parametas as $parameta)
+			<tr>
+				<td>{{$parameta["id"]}}</td>
+				<td>{{$parameta["name"]}}</td>
+				<td>{{$parameta["thresh"]}}</td>
+				<td>{{$parameta["max"]}}</td>
+				<td>{{$parameta["bs"]}}</td>
+				<td>{{$parameta["iteration"]}}</td>
+				<td>{{$parameta["created_at"]}}</td>
+				<td>
+					@if($parameta["active"] == null)
+						<p style="color: blue">INACTIVE</p>
+					@else
+						<p style="color: red">ACTIVE</p>
+					@endif
+				</td>
+				<td>
+					<form method="get" action="/search/paraName">
+						<input type="hidden" name="method" value="paraName" />
+						<input type="hidden" name="q" value="{{ $parameta['name'] }}" />
+						<input type="submit"  value="この値で検索" />
+					</form>
+				</td>
+			</tr>
+		@endforeach
+		@endif
+		</tbody>
+	</table>
+
+	</div>
+</div>
+
+
 {{ $parametas->appends(request()->query())->links()}}
 @endsection
 

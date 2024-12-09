@@ -34,7 +34,7 @@
 		<p>内容：{{$q1}} ~ {{$q2}}</p>
 	@break
 	@case("judgment")
-		<p>検索：ACTIVE検索</p>
+		<p>検索：良品・不良品検索</p>
 		<p>内容：{{$q}}</p>
 	@break
 @endswitch
