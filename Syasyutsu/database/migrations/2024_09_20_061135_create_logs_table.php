@@ -12,12 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('logs', function (Blueprint $table) {
-            	$table->id();
-		$table->text("name");
-		$table->text("path");
-		$table->text("description");
-		$table->text("judgment");
-            	$table->timestamps();
+        $table->id();
+		$table->text("name_upper");
+        $table->text("name_side");
+		$table->text("paraName");
+		$table->float("width");
+        $table->float("length");
+        $table->float("height");
+		$table->boolean("judgment");
+        $table->timestamp('created_at')->nullable();
+        $table->integer("year");
+        $table->integer("month");
+        $table->integer("day");
+        $table->integer("time");
         });
     }
 

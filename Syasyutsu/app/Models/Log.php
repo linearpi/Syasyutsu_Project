@@ -8,9 +8,4 @@ use Illuminate\Database\Eloquent\Model;
 class Log extends Model
 {
     use HasFactory;
-
-	public static $rules = array(
-		"description" => "required|max:150",
-		"judgment" => "required"
-	);
 }

@@ -67,10 +67,10 @@
 			@csrf
 				<input type="hidden" name="method" value="judgment" />
 				<label for="good"> 良品</label>
-				<input type="radio" name="q" id="good" value="good"/>
+				<input type="radio" name="q" id="1" value="good"/>
 
 				<label for="bad"> 不良品</label>
-				<input type="radio" name="q" id="bad" value="bad"/>
+				<input type="radio" name="q" id="0" value="bad"/>
 				<input class="w3-display-right search-button" type="submit" value="送信" />
 			</form></td>
 		</tr>

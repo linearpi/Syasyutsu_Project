@@ -145,7 +145,7 @@ class Downloader extends Controller
         $headers	=	['Content-Type' => 'image/png'];
         $folder = $log->year."_".$log->month."_".$log->day;
 
-        $remoteURL = "http://192.168.11.13/pictures/".$folder."/".$image_name;  
+        $remoteURL = "http://192.168.11.16/pictures/".$folder."/".$image_name;  
         $savePath = "/home/j2321310/pictures/image.png";
 
         $items = [

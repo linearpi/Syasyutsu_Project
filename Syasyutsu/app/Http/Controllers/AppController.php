@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Sample_log;
+use App\Models\Log;
 use App\Models\Folder;
 
 use Illuminate\Support\Facades\DB;
@@ -21,8 +21,8 @@ class AppController extends Controller
 	public function search_all(Request $request)
 	{
 
-		//$logs = Sample_log::all();
-		$logs = Sample_log::orderBy("id","desc")->paginate(10);
+		//$logs = Log::all();
+		$logs = Log::orderBy("id","desc")->paginate(10);
 
 
 		$data = array(
@@ -42,7 +42,7 @@ class AppController extends Controller
 		]);
 
 
-		$logs = Sample_log::orWhere('parameta_name','like','%'.$request->q.'%')
+		$logs = Log::orWhere('paraName','like','%'.$request->q.'%')
 		->orderBy("id","desc")->paginate(10);
 
 
@@ -63,7 +63,7 @@ class AppController extends Controller
 			'method' => 'required',
 		]);
 
-		$logs = Sample_log::whereDate('created_at',$request->q)
+		$logs = Log::whereDate('created_at',$request->q)
 			->orderBy("id","desc")->paginate(10);
 
 
@@ -89,7 +89,7 @@ class AppController extends Controller
         $new_period = $request->q2." 23:59:59";
 		
 		//データを検索
-		$logs = Sample_log::whereBetween('created_at',[$old_period,$new_period])
+		$logs = Log::whereBetween('created_at',[$old_period,$new_period])
 			->orderBy("id","desc")->paginate(10);
 
 
@@ -113,7 +113,7 @@ class AppController extends Controller
 			'method' => 'required',
 		]);
 		
-		$logs = Sample_log::where('judgment',$request->q)
+		$logs = Log::where('judgment',$request->q)
 			->orderBy("id","desc")->paginate(10);
 
 

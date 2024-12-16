@@ -66,10 +66,12 @@
 			<thead>
 			<tr>
 				<th>番号</th>
-				<th>画像名</th>
+				<th>画像名(上)</th>
+				<th>画像名(横)</th>
 				<th>パラメータ名</th>
-				<th>ヨコ幅</th>
-				<th>タテ幅</th>
+				<th>横幅</th>
+				<th>縦幅</th>
+				<th>高さ</th>
 				<th>判定</th>
 				<th>作成日</th>
 			</tr>
@@ -85,16 +87,24 @@
 		@foreach($logs as $log)
 			<tr>
 				<td>{{$log["id"]}}</td>
-				<td>{{$log["name"]}}</td>
-				<td>{{$log["parameta_name"]}}</td>
+				<td>{{$log["name_upper"]}}</td>
+				<td>{{$log["name_side"]}}</td>
+				<td>{{$log["paraName"]}}</td>
 				<td>{{$log["width"]}}</td>
+				<td>{{$log["length"]}}</td>
 				<td>{{$log["height"]}}</td>
-				<td>{{$log["judgment"]}}</td>
-				<td>{{$log["created_at"]}}</td>
+				<td>
+					@if($log["judgment"] == 1)
+						良品
+					@else
+						不良品
+					@endif
+				</td>
+				<td>{{$log["year"]}}_{{$log["month"]}}_{{$log["day"]}}_{{$log["time"]}}</td>
 				<td>
 					<div id='{{ $log["id"] }}_img'>
-						<a href="http://192.168.11.13/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name'] }}.png" data-lightbox="abc" data-title="{{ $log['name'] }}">
-							<img src="http://192.168.11.13/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name'] }}.png" width="60px" alt="none">
+						<a href="http://192.168.11.16/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name'] }}.png" data-lightbox="abc" data-title="{{ $log['name'] }}">
+							<img src="http://192.168.11.16/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name'] }}.png" width="60px" alt="none">
 						</a>
 					</div>
 				</td>
@@ -109,7 +119,7 @@
 							});
 						};
 
-						chk("http://192.168.11.13/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name'] }}.png")
+						chk("http://192.168.11.16/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name'] }}.png")
 							.catch((url) => {
 								document.getElementById('{{ $log["id"] }}_img').innerHTML = "none";
 								document.getElementById('{{ $log["id"] }}').innerHTML = "ダウンロード不可";
