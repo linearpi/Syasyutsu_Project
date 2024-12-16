@@ -1,0 +1,57 @@
+.head{
+    width: 100%;
+    height: 100px;
+}
+
+.head p{
+    font-size: 50px;   
+    font-weight: bold;
+    font-style: italic;
+}
+
+.content1{
+    position: relative;
+    width: 100%;
+    height: 600px;
+    background-image: url("../images/app/top_background.jpg");
+    background-position: center;
+    background-size: cover;
+}
+
+.content1-clear{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(255,255,255,0.55);
+}
+
+.content1-headder{
+    width: 50%;
+    min-width: 300px;
+    background-color: grey;
+    /* 水平・垂直方向の中央揃え */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.title{
+    font-size: 40px;
+}
+
+.content2{
+    width: 100%;
+    height: 100px;
+}
+
+.btn-msg{
+    font-size: 20px;
+}
+
+.content3{
+    position: relative;
+    width: 100%;
+    height: 130px;
+}
+
