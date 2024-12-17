@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Livewire;
-
+/* 
+    削除するとエラーが起きるので、そのままにしている。
+    とくに役割はない。
+ */
 use Livewire\Component;
 
 class Counter extends Component

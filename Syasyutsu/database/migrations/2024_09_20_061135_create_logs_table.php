@@ -20,7 +20,7 @@ return new class extends Migration
         $table->float("length");
         $table->float("height");
 		$table->boolean("judgment");
-        $table->timestamp('created_at')->nullable();
+        $table->timestamp('created_at');
         $table->integer("year");
         $table->integer("month");
         $table->integer("day");

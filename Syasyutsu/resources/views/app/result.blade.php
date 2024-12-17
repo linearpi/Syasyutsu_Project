@@ -1,6 +1,6 @@
 @extends('layouts.base_result')
 
-@section('title','ログ　検索ページ')
+@section('title','ログ　検索結果ページ')
 
 @section('headder')
 <div class="head w3-display-container w3-teal">
@@ -74,6 +74,7 @@
 				<th>高さ</th>
 				<th>判定</th>
 				<th>作成日</th>
+				<th>画像の有無</th>
 			</tr>
 			</thead>
 
