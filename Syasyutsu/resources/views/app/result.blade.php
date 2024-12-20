@@ -74,7 +74,8 @@
 				<th>高さ</th>
 				<th>判定</th>
 				<th>作成日</th>
-				<th>画像の有無</th>
+				<th>上部の画像</th>
+				<th>横側の画像</th>
 			</tr>
 			</thead>
 
@@ -103,14 +104,22 @@
 				</td>
 				<td>{{$log["year"]}}_{{$log["month"]}}_{{$log["day"]}}_{{$log["time"]}}</td>
 				<td>
-					<div id='{{ $log["id"] }}_img'>
-						<a href="http://192.168.11.16/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name'] }}.png" data-lightbox="abc" data-title="{{ $log['name'] }}">
-							<img src="http://192.168.11.16/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name'] }}.png" width="60px" alt="none">
+					<div id='{{ $log["id"] }}_img_upper'>
+						<a href="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.jpg" data-lightbox="abc" data-title="{{ $log['name'] }}">
+							<img src="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.jpg" width="60px" alt="none">
+						</a>
+					</div>
+				</td>
+				<td>
+					<div id='{{ $log["id"] }}_img_side'>
+						<a href="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_side'] }}.jpg" data-lightbox="abc" data-title="{{ $log['name'] }}">
+							<img src="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_side'] }}.jpg" width="60px" alt="none">
 						</a>
 					</div>
 				</td>
 				<div>
 					<script>
+						//NAS内部の画像を探し、無い場合はダウンロード不可とする。
 						function chk(url) {
 							return new Promise(function (resolve, reject) {
 								const img = new Image();
@@ -141,9 +150,15 @@
 							});
 						}
 
-						chk("http://192.168.11.16/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name'] }}.png")
+						chk("http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.jpg")
 							.catch((url) => {
-								document.getElementById('{{ $log["id"] }}_img').innerHTML = "none";
+								document.getElementById('{{ $log["id"] }}_img_upper').innerHTML = "none";
+								document.getElementById('{{ $log["id"] }}').innerHTML = "ダウンロード不可";
+							});
+
+						chk("http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.jpg")
+							.catch((url) => {
+								document.getElementById('{{ $log["id"] }}_img_upper').innerHTML = "none";
 								document.getElementById('{{ $log["id"] }}').innerHTML = "ダウンロード不可";
 							});
 

@@ -14,6 +14,7 @@
     width: 100%;
     height: 600px;
     background-image: url("../images/app/top_background.jpg");
+    background-image: url("http://192.168.11.13/nas/pictures/smile.JPG");
     background-position: center;
     background-size: cover;
 }

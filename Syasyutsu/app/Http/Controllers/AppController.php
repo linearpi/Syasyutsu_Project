@@ -113,7 +113,13 @@ class AppController extends Controller
 			'method' => 'required',
 		]);
 		
-		$logs = Log::where('judgment',$request->q)
+		if($request->q === "1"){
+			$parameta = 1;
+		}else{
+			$parameta = 0;
+		}
+
+		$logs = Log::where('judgment',$parameta)
 			->orderBy("id","desc")->paginate(10);
 
 
