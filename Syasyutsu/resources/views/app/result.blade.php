@@ -111,20 +111,42 @@
 				</td>
 				<div>
 					<script>
-						function chk(url){
+						function chk(url) {
 							return new Promise(function (resolve, reject) {
 								const img = new Image();
+								let timer;
+								
+								// タイムアウトを設定（例えば5秒）
+								const timeout = new Promise((_, reject) => {
+									timer = setTimeout(() => {
+										reject(new Error("Timeout"));
+									}, 100); // 100ミリ秒（0.1秒）
+								});
+
 								img.src = url;
-								img.onload = function () { return resolve(url) };
-								img.onerror = function () { return reject(url) };
+								img.onload = function () {
+									clearTimeout(timer); // タイムアウトのクリア
+									resolve(url);
+								};
+								img.onerror = function () {
+									clearTimeout(timer); // タイムアウトのクリア
+									reject(url);
+								};
+
+								// imgのロードとタイムアウトの競合
+								Promise.race([timeout, new Promise((resolve, reject) => {
+									img.onload = function () { resolve(url); };
+									img.onerror = function () { reject(url); };
+								})]).then(resolve).catch(reject);
 							});
-						};
+						}
 
 						chk("http://192.168.11.16/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name'] }}.png")
 							.catch((url) => {
 								document.getElementById('{{ $log["id"] }}_img').innerHTML = "none";
 								document.getElementById('{{ $log["id"] }}').innerHTML = "ダウンロード不可";
 							});
+
 					</script>
 				</div>
 				<td>
