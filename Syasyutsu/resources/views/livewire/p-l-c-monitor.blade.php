@@ -14,18 +14,53 @@
     </div>
 
     <div class="main">
+        <div class="base-content w3-display-container">
+            <div class="w3-display-middle">
+                <table border="1" class="monitor">
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <th colspan="2">成形機</th>
+                                </tr>
+                                <tr>
+                                    <th>状態：</th>
+                                    <td>生成中</td>
+                                </tr>
+                            </table>
+                        </td>
 
-            <h2>--データ--</h2>
+                        <td>
+                            <table>
+                                <tr>
+                                    <th colspan="2">ゲートカット</th>
+                                </tr>
+                                <tr>
+                                    <th>状態：</th>
+                                    <td>カット中</td>
+                                </tr>
+                            </table>
+                        </td>
 
-
-        @if($data == "ON") 
-            <div class="content1" style="background-image: url('../images/app/ON.jpg');">
+                        <td>
+                        <table>
+                                <tr>
+                                    <th colspan="2">寸法測定システム</th>
+                                </tr>
+                                <tr>
+                                    <th>画像処理用端末A：</th>
+                                    <td>測定中</td>
+                                </tr>
+                                <tr>
+                                    <th>画像処理用端末B：</th>
+                                    <td>待機中</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
             </div>
-        @else
-            <div class="content1" style="background-image: url('../images/app/OFF.jpg');">
-
-            </div>
-        @endif
+        </div>
     </div>
 
     <div class="footer">
@@ -40,9 +75,9 @@
     @script
     <script>
         setInterval(() => {
-            //Livewire内部で動作しているオブジェクトのメソッドを1000msごとに実行
+            //Livewire内部で動作しているオブジェクトのメソッドを50000msごとに実行
             $wire.increment()
-        }, 500)
+        }, 50000)
     </script>
     @endscript
 </div>
