@@ -17,8 +17,29 @@
     background-size: cover;
 }
 
-.monitor td{
-    height: 100%;
+.base-table-headder{
+    width: 300px;
+}
+
+.base-table-data{
+    vertical-align: top;
+}
+
+.monitor-table-row{
+    height: 50px;
+    vertical-align: top;
+}
+
+.monitor-table-headder{
+    width: 150px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.monitor-table-data{
+    width: 150px;
+    text-align: center;
+    vertical-align: middle;
 }
 
 .content2{
