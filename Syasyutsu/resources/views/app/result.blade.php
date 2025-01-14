@@ -17,6 +17,9 @@
 
 @section('main')
 
+
+<div class="result-msg">
+
 @switch($method)
 	@case("all")
 		<p>検索：全期間検索</p>
@@ -39,10 +42,12 @@
 	@break
 @endswitch
 
-<p>{{ $logs->total() }}件中
-@php
-	echo count($logs) ."件表示</p>"
-@endphp
+	<p>{{ $logs->total() }}件中
+	@php
+		echo count($logs) ."件表示</p>"
+	@endphp
+</div>
+
 	
 
 <div class="content1 w3-display-container">
@@ -56,7 +61,7 @@
 		@else
 			<input type="hidden" name="q" value="{{ $q }}" >
 		@endif
-			<label>検索結果をダウンロード
+			<label class="downlaod-label">検索結果をダウンロード
 			<input class="download-btn" type="submit" value="CSVダウンロード">
 			</label>
 		</form>
@@ -65,17 +70,17 @@
 		<table border="1" class="w3-display-middle">
 			<thead>
 			<tr>
-				<th>番号</th>
-				<th>画像名(上)</th>
-				<th>画像名(横)</th>
-				<th>パラメータ名</th>
-				<th>横幅</th>
-				<th>縦幅</th>
-				<th>高さ</th>
-				<th>判定</th>
-				<th>作成日</th>
-				<th>上部の画像</th>
-				<th>横側の画像</th>
+				<th class="id">番号</th>
+				<th class="name-picture-upper">画像名(上)</th>
+				<th class="name-picture-side">画像名(横)</th>
+				<th class="parameta-name">パラメータ名</th>
+				<th  class="width">横幅</th>
+				<th class="vartical">縦幅</th>
+				<th  class="height">高さ</th>
+				<th class="judgement">判定</th>
+				<th class="created-day">作成日</th>
+				<th class="picture-upper">上部の画像</th>
+				<th class="picture-side">横側の画像</th>
 			</tr>
 			</thead>
 
@@ -102,18 +107,18 @@
 						不良品
 					@endif
 				</td>
-				<td>{{$log["year"]}}_{{$log["month"]}}_{{$log["day"]}}_{{$log["time"]}}</td>
+				<td>{{$log["year"]}}/{{$log["month"]}}/{{$log["day"]}}_{{$log["time"]}}</td>
 				<td>
 					<div id='{{ $log["id"] }}_img_upper'>
 						<a href="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.jpg" data-lightbox="abc" data-title="{{ $log['name'] }}">
-							<img src="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.jpg" width="60px" alt="none">
+							<img src="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.jpg" width="120px" alt="none">
 						</a>
 					</div>
 				</td>
 				<td>
 					<div id='{{ $log["id"] }}_img_side'>
 						<a href="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_side'] }}.jpg" data-lightbox="abc" data-title="{{ $log['name'] }}">
-							<img src="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_side'] }}.jpg" width="60px" alt="none">
+							<img src="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_side'] }}.jpg" width="120px" alt="none">
 						</a>
 					</div>
 				</td>

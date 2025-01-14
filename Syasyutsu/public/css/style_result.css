@@ -22,7 +22,7 @@
 }
 
 .content3{
-    width: 1500px;
+    width: 3500px;
 }
 
 .download-btn{
@@ -32,8 +32,14 @@
 }
 
 table{
-    width: 1100px;
+    /*width: 1300px;*/
     font-size: 20px;
+    text-align: center;
+}
+
+th{
+    max-width: 200px;
+    width: 150px;
 }
 
 /* ページ送りを中央寄せ */
@@ -45,4 +51,12 @@ table{
 .pagination li{
     display: inline-block;
     font-size: 18px;
+}
+
+.result-msg p{
+    font-size: 20px;
+}
+
+.downlaod-label{
+    font-size: 20px;
 }
