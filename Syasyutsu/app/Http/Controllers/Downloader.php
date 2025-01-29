@@ -140,20 +140,24 @@ class Downloader extends Controller
     public function exportIMAGE(Request $request){
         $log = json_decode($request->log);
 
-        //$image_name = $request->name_sample.".jpg";
-        $image_name = $log->name.".png";
+        //画像名を取得
+        $image_name_upper = $log->name_upper.".png";
+        $image_name_side = $log->name_side.".png";
+
+        //ヘッダーを作成
         $headers	=	['Content-Type' => 'image/png'];
+
+        //画像が保存されているフォルダ
         $folder = $log->year."_".$log->month."_".$log->day;
 
-        $remoteURL = "http://192.168.11.16/pictures/".$folder."/".$image_name;  
-        $savePath = "/home/j2321310/pictures/image.png";
+        //
+        $remoteURL = "http://192.168.11.13/nas/pictures/".$folder."/".$image_name_upper;  
+        $savePath = "/home/syasyutsu_user/picture/image.png";
 
         $items = [
             "save-path" => $savePath,
             "remoteURL" => $remoteURL,
         ];
-
-        //return $items;
 
         //画像取得
         $image = file_get_contents($remoteURL);

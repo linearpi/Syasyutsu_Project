@@ -102,23 +102,23 @@
 				<td>{{$log["height"]}}</td>
 				<td>
 					@if($log["judgment"] == 1)
-						良品
+						良
 					@else
-						不良品
+						不
 					@endif
 				</td>
 				<td>{{$log["year"]}}/{{$log["month"]}}/{{$log["day"]}}_{{$log["time"]}}</td>
 				<td>
 					<div id='{{ $log["id"] }}_img_upper'>
-						<a href="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.jpg" data-lightbox="abc" data-title="{{ $log['name'] }}">
-							<img src="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.jpg" width="120px" alt="none">
+						<a href="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.png" data-lightbox="abc" data-title="{{ $log['name'] }}">
+							<img src="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.png" width="60px" alt="none">
 						</a>
 					</div>
 				</td>
 				<td>
 					<div id='{{ $log["id"] }}_img_side'>
-						<a href="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_side'] }}.jpg" data-lightbox="abc" data-title="{{ $log['name'] }}">
-							<img src="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_side'] }}.jpg" width="120px" alt="none">
+						<a href="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_side'] }}.png" data-lightbox="abc" data-title="{{ $log['name'] }}">
+							<img src="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_side'] }}.png" width="60px" alt="none">
 						</a>
 					</div>
 				</td>
@@ -155,15 +155,15 @@
 							});
 						}
 
-						chk("http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.jpg")
+						chk("http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.png")
 							.catch((url) => {
 								document.getElementById('{{ $log["id"] }}_img_upper').innerHTML = "none";
 								document.getElementById('{{ $log["id"] }}').innerHTML = "ダウンロード不可";
 							});
 
-						chk("http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.jpg")
+						chk("http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_side'] }}.png")
 							.catch((url) => {
-								document.getElementById('{{ $log["id"] }}_img_upper').innerHTML = "none";
+								document.getElementById('{{ $log["id"] }}_img_side').innerHTML = "none";
 								document.getElementById('{{ $log["id"] }}').innerHTML = "ダウンロード不可";
 							});
 
