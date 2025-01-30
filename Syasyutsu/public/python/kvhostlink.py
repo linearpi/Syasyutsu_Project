@@ -98,25 +98,39 @@ kv = kvHostLink('192.168.11.9')
 
 ###連続運転
 data = kv.read('M0.U')
-print(data)
+m0 = data[0:5].decode("utf-8")
 
-#単独運転-ゲートカット
-data = kv.read('M1.U')
-print(data)
+###アラーム
+data = kv.read('M22.U')
+m22 = data[0:5].decode("utf-8")
 
-#単独運転-ゲートカット＆画像検査
-data = kv.read('M2.U')
-print(data)
+if(m0 == "00000" and m22 == "00000"):
+    print("停止中")
+elif(m0 == "00001"):
+    print("連動運転")
+elif(m0 == "00002"):
+    print("独立運転")
+elif( m0 == "00000" and m22 == "00001"):
+    print("エラー")
+else:
+    print("該当なし")
+# #単独運転-ゲートカット
+# data = kv.read('M1.U')
+# print(data)
 
-#単独運転-画像検査
-data = kv.read('M3.U')
-print(data)
+# #単独運転-ゲートカット＆画像検査
+# data = kv.read('M2.U')
+# print(data)
 
-#原点復帰
-data = kv.read('M7.U')
-print(data)
+# #単独運転-画像検査
+# data = kv.read('M3.U')
+# print(data)
+
+# #原点復帰
+# data = kv.read('M7.U')
+# print(data)
 
 #アラーム
-data = kv.read('M22.U')
-print(data)
+# data = kv.read('M22.U')
+# print(data)
 

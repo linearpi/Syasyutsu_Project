@@ -67,25 +67,26 @@ class PLCMonitor extends Component
     public function test_monitoring(){
         $output = [];
 
-        exec("python3 ./python/hello2.py",$output);   //Pythonからテストメッセージを取得
+        exec("python3 ./python/kvhostlink.py",$output);   //Pythonからテストメッセージを取得
 
             /*成形機　データ */
         $this->seikeiki_data = $output[0];
-        $this->seikeiki_error = $output[1];
+        //$this->seikeiki_error = $output[1];
+        $this->seikeiki_error = "ダミー";
 
         /*アームロボット　データ */
-        $this->arm_data = $output[2];
-        $this->arm_error = $output[3];
+        $this->arm_data = "ダミー";
+        $this->arm_error = "ダミー";
 
         /*ゲートカット　データ */
-        $this->gate_data = $output[4];
-        $this->gate_error = $output[5];
+        $this->gate_data = "ダミー";
+        $this->gate_error = "ダミー";
 
         /*画像処理用端末　データ */
-        $this->CVA_data = $output[6];
-        $this->CVB_data = $output[7];
-        $this->seikeihin_good = $output[8];
-        $this->seikeihin_error = $output[9];
+        $this->CVA_data = "ダミー";
+        $this->CVB_data = "ダミー";
+        $this->seikeihin_good = "ダミー";
+        $this->seikeihin_error = "ダミー";
 
 /*******************************************************/
         /*今日保存したデータから成形品の良品と不良品の個数を取得 */
