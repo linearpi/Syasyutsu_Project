@@ -74,6 +74,7 @@
 				<th class="name-picture-upper">画像名(上)</th>
 				<th class="name-picture-side">画像名(横)</th>
 				<th class="parameta-name">パラメータ名</th>
+				<th >パラメータ検索</th>
 				<th  class="width">横幅</th>
 				<th class="vartical">縦幅</th>
 				<th  class="height">高さ</th>
@@ -97,6 +98,14 @@
 				<td>{{$log["name_upper"]}}</td>
 				<td>{{$log["name_side"]}}</td>
 				<td>{{$log["paraName"]}}</td>
+				<td>
+					<form action="/search/parameta/name" method="GET">
+					@csrf
+						<input type="hidden" name="q" value='{{$log["paraName"]}}'>
+						<input type="hidden" name="method" value="name" />
+						<input type="submit" value="この値で検索" >
+					</form>
+				</td>
 				<td>{{$log["width"]}}</td>
 				<td>{{$log["length"]}}</td>
 				<td>{{$log["height"]}}</td>

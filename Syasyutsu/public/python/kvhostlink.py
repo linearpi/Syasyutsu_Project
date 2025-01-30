@@ -94,11 +94,29 @@ class kvHostLink:
         rcv = self.sendrecive(('WRS ' + addresssuffix + ' ' + str(num) + ' ' + data + '\r').encode())
         return rcv
 
-kv = kvHostLink('192.168.11.6')
-data1 = kv.read('M5000.U')
-print(data1)
-data3 = kv.read('X100.U')
-print(data3)
-data2 = kv.read('Y117.U')
-print(data2)
+kv = kvHostLink('192.168.11.9')
+
+###連続運転
+data = kv.read('M0.U')
+print(data)
+
+#単独運転-ゲートカット
+data = kv.read('M1.U')
+print(data)
+
+#単独運転-ゲートカット＆画像検査
+data = kv.read('M2.U')
+print(data)
+
+#単独運転-画像検査
+data = kv.read('M3.U')
+print(data)
+
+#原点復帰
+data = kv.read('M7.U')
+print(data)
+
+#アラーム
+data = kv.read('M22.U')
+print(data)
 

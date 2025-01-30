@@ -9,5 +9,5 @@ class Parameta extends Model
 {
     use HasFactory;
 
-	protected $table = 'parametasample';
+	protected $table = 'parameta';
 }

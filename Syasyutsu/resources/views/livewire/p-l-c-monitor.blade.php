@@ -72,11 +72,11 @@
                                 </tr>
                                 <tr class="monitor-table-row">
                                     <th class="monitor-table-headder">良品数</th>
-                                    <td class="monitor-table-data">{{ $seikeihin_good }}</td>
+                                    <td class="monitor-table-data">{{ $amo_good }}</td>
                                 </tr>
                                 <tr class="monitor-table-row">
                                     <th class="monitor-table-headder">不良数</th>
-                                    <td class="monitor-table-data">{{ $seikeihin_error }}</td>
+                                    <td class="monitor-table-data">{{ $amo_bad }}</td>
                                 </tr>
                             </table>
                         </td>
@@ -89,7 +89,7 @@
     <div class="footer">
         <div class="content2 w3-display-container">
             <div class="w3-display-bottomright">
-                <p>作成日　2024/12/4(水)</p>
+                <p>作成日　2025/2/3(月)</p>
             </div>
         </div>
     </div>

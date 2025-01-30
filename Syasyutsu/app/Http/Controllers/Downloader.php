@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Models\Sample_log;
+use App\Models\Log;
+use Zip;
 
 class Downloader extends Controller
 {
@@ -12,7 +13,7 @@ class Downloader extends Controller
     public function exportCSV(Request  $request)
     {
 
-        $filename = 'sample_log-data.csv';
+        $filename = 'log-data.csv';
     
         $headers = [
             'Content-Type' => 'text/csv',
@@ -39,17 +40,19 @@ class Downloader extends Controller
              // Fetch and process data in chunks
              //　日付検索を実施し、そのデータをCSVファイルに書き込んでいる
             if($request->method === "all"){
-                Sample_log::chunk(25, function ($sample_logs) use ($handle) {
-                    foreach ($sample_logs as $sample_log) {
+                Log::chunk(25, function ($sample_logs) use ($handle) {
+                    foreach ($sample_logs as $log) {
                  // Extract data from each employee.
                         $data = [
-                            isset($sample_log->id)? $sample_log->id : '',
-                            isset($sample_log->name)? $sample_log->name : '',
-                            isset($sample_log->width)? $sample_log->width : '',
-                            isset($sample_log->height)? $sample_log->height : '',
-                            isset($sample_log->judgment)? $sample_log->judgment : '',
-                            isset($sample_log->created_at)? $sample_log->created_at : '',
-                            isset($sample_log->updated_at)? $sample_log->updated_at : '',
+                            isset($log->id)? $log->id : '',
+                            isset($log->name_upper)? $log->name_upper : '',
+                            isset($log->name_side)? $log->name_side : '',
+                            isset($log->paraName)? $log->paraName : '',
+                            isset($log->width)? $log->width : '',
+                            isset($log->length)? $log->length : '',
+                            isset($log->height)? $log->height : '',
+                            isset($log->judgment)? $log->judgment : '',
+                            isset($log->created_at)? $log->created_at : '',
                         ];
         
                  // Write data to a CSV file.
@@ -57,17 +60,19 @@ class Downloader extends Controller
                     }
                 });
             }else if($request->method === "date"){
-                Sample_log::whereDate('created_at',$request->q)->chunk(25, function ($sample_logs) use ($handle) {
-                    foreach ($sample_logs as $sample_log) {
+                Log::whereDate('created_at',$request->q)->chunk(25, function ($sample_logs) use ($handle) {
+                    foreach ($sample_logs as $log) {
                  // Extract data from each employee.
                         $data = [
-                            isset($sample_log->id)? $sample_log->id : '',
-                            isset($sample_log->name)? $sample_log->name : '',
-                            isset($sample_log->width)? $sample_log->width : '',
-                            isset($sample_log->height)? $sample_log->height : '',
-                            isset($sample_log->judgment)? $sample_log->judgment : '',
-                            isset($sample_log->created_at)? $sample_log->created_at : '',
-                            isset($sample_log->updated_at)? $sample_log->updated_at : '',
+                            isset($log->id)? $log->id : '',
+                            isset($log->name_upper)? $log->name_upper : '',
+                            isset($log->name_side)? $log->name_side : '',
+                            isset($log->paraName)? $log->paraName : '',
+                            isset($log->width)? $log->width : '',
+                            isset($log->length)? $log->length : '',
+                            isset($log->height)? $log->height : '',
+                            isset($log->judgment)? $log->judgment : '',
+                            isset($log->created_at)? $log->created_at : '',
                         ];
         
                  // Write data to a CSV file.
@@ -80,18 +85,20 @@ class Downloader extends Controller
                 $old_period = $request->q1." 00:00:00";
                 $new_period = $request->q2." 23:59:59";
 
-                Sample_log::whereBetween('created_at',[$old_period,$new_period])->chunk(25, function ($sample_logs) use ($handle) {
+                Log::whereBetween('created_at',[$old_period,$new_period])->chunk(25, function ($sample_logs) use ($handle) {
 
-                    foreach ($sample_logs as $sample_log) {
+                    foreach ($sample_logs as $log) {
                         // Extract data from each employee.
                         $data = [
-                            isset($sample_log->id)? $sample_log->id : '',
-                            isset($sample_log->name)? $sample_log->name : '',
-                            isset($sample_log->width)? $sample_log->width : '',
-                            isset($sample_log->height)? $sample_log->height : '',
-                            isset($sample_log->judgment)? $sample_log->judgment : '',
-                            isset($sample_log->created_at)? $sample_log->created_at : '',
-                            isset($sample_log->updated_at)? $sample_log->updated_at : '',
+                            isset($log->id)? $log->id : '',
+                            isset($log->name_upper)? $log->name_upper : '',
+                            isset($log->name_side)? $log->name_side : '',
+                            isset($log->paraName)? $log->paraName : '',
+                            isset($log->width)? $log->width : '',
+                            isset($log->length)? $log->length : '',
+                            isset($log->height)? $log->height : '',
+                            isset($log->judgment)? $log->judgment : '',
+                            isset($log->created_at)? $log->created_at : '',
                         ];
         
                         // Write data to a CSV file.
@@ -99,18 +106,20 @@ class Downloader extends Controller
                     }
                 });
             }else if($request->method === "judgment"){
-                Sample_log::where('judgment',$request->q)->chunk(25, function ($sample_logs) use ($handle) {
-                    foreach ($sample_logs as $sample_log) {
+                Log::where('judgment',$request->q)->chunk(25, function ($sample_logs) use ($handle) {
+                    foreach ($sample_logs as $log) {
                  // Extract data from each employee.
-                        $data = [
-                            isset($sample_log->id)? $sample_log->id : '',
-                            isset($sample_log->name)? $sample_log->name : '',
-                            isset($sample_log->width)? $sample_log->width : '',
-                            isset($sample_log->height)? $sample_log->height : '',
-                            isset($sample_log->judgment)? $sample_log->judgment : '',
-                            isset($sample_log->created_at)? $sample_log->created_at : '',
-                            isset($sample_log->updated_at)? $sample_log->updated_at : '',
-                        ];
+                 $data = [
+                    isset($log->id)? $log->id : '',
+                    isset($log->name_upper)? $log->name_upper : '',
+                    isset($log->name_side)? $log->name_side : '',
+                    isset($log->paraName)? $log->paraName : '',
+                    isset($log->width)? $log->width : '',
+                    isset($log->length)? $log->length : '',
+                    isset($log->height)? $log->height : '',
+                    isset($log->judgment)? $log->judgment : '',
+                    isset($log->created_at)? $log->created_at : '',
+                ];
         
                  // Write data to a CSV file.
                         fputcsv($handle, $data);
@@ -119,12 +128,14 @@ class Downloader extends Controller
             }else{
                 fputcsv($handle, [
                     'id',
-                    'name',
+                    'name_upper',
+                    'name_side',
+                    'paraName',
                     'width',
+                    'length',
                     'height',
                     'judgment',
                     'created_at',
-                    'updated_at',
                 ]);
             }
     
@@ -140,9 +151,10 @@ class Downloader extends Controller
     public function exportIMAGE(Request $request){
         $log = json_decode($request->log);
 
-        //画像名を取得
+        //画像名を取得・Zip名を作成
         $image_name_upper = $log->name_upper.".png";
         $image_name_side = $log->name_side.".png";
+        $zip_name = "download.zip";
 
         //ヘッダーを作成
         $headers	=	['Content-Type' => 'image/png'];
@@ -150,22 +162,29 @@ class Downloader extends Controller
         //画像が保存されているフォルダ
         $folder = $log->year."_".$log->month."_".$log->day;
 
-        //
-        $remoteURL = "http://192.168.11.13/nas/pictures/".$folder."/".$image_name_upper;  
-        $savePath = "/home/syasyutsu_user/picture/image.png";
-
-        $items = [
-            "save-path" => $savePath,
-            "remoteURL" => $remoteURL,
-        ];
+        //画像が保存されているリモートURL
+        $remoteURL_upper = "http://192.168.11.13/nas/pictures/".$folder."/".$image_name_upper;
+        $remoteURL_side = "http://192.168.11.13/nas/pictures/".$folder."/".$image_name_side;
+        
+        
+        //画像・Zipファイルを一時的に保存するフォルダ
+        $savePath = "/home/syasyutsu_user/store/";
+        $savePath_zip = $savePath.$zip_name;
+        $savePath_upper = $savePath."image_upper.png";
+        $savePath_side = $savePath."image_side.png";
 
         //画像取得
-        $image = file_get_contents($remoteURL);
+        $raw_image_upper = file_get_contents($remoteURL_upper);
+        $raw_image_side = file_get_contents($remoteURL_side);
 
         //画像一時保存
-        file_put_contents($savePath,$image);
+        file_put_contents($savePath_upper,$raw_image_upper);
+        file_put_contents($savePath_side,$raw_image_side);
 
-        return response()->download($savePath,$image_name);        
+        //Zipファイルを指定フォルダに作成
+        Zip::create($zip_name,[$savePath_upper,$savePath_side])->saveTo($savePath);
+
+        return response()->download($savePath_zip,basename($savePath_zip),[])->deleteFileAfterSend(true);
     }
 
 }

@@ -132,8 +132,25 @@ class AppController extends Controller
 		return view('app/result',$data);
 	}
 	
-	public function test(){
+    public function test(){
+        date_default_timezone_set("Asia/Tokyo");
+        $year = date("Y");
+        $month = date("m");
+        $date = date("d");
 
-	}
+		$q = $year."_".$month."_".$date;
+
+        $today = Log::whereDate("created_at",$q)->count();
+
+		$good = Log::whereDate("created_at",$q)->where("judgment","=","1")->count();
+		$bad = Log::whereDate("created_at",$q)->where("judgment","=","0")->count();
+
+		return [
+			"q" => $q,
+			"today"=>$today,
+			"good" => $good,
+			"bad" => $bad,
+		];
+    }
 
 }
