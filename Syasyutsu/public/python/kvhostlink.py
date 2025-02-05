@@ -94,15 +94,40 @@ class kvHostLink:
         rcv = self.sendrecive(('WRS ' + addresssuffix + ' ' + str(num) + ' ' + data + '\r').encode())
         return rcv
 
-kv = kvHostLink('192.168.11.9')
+m0 = ""
+m22 = ""
 
-###連続運転
-data = kv.read('M0.U')
-m0 = data[0:5].decode("utf-8")
+try:
+    kv = kvHostLink('192.168.11.9')
 
-###アラーム
-data = kv.read('M22.U')
-m22 = data[0:5].decode("utf-8")
+    ###連続運転
+    data = kv.read('M0.U')
+    m0 = data[0:5].decode("utf-8")
+
+    # ###単独運転-ゲートカット
+    # data = kv.read('M1.U')
+    # m1 = data[0:5].decode("utf-8")
+
+    # ###単独運転-ゲートカット＆画像検査
+    # data = kv.read('M2.U')
+    # m2 = data[0:5].decode("utf-8")
+
+    # ###単独運転-画像検査
+    # data = kv.read('M3.U')
+    # m3 = data[0:5].decode("utf-8")
+
+    # ###原点復帰
+    # data = kv.read('M7.U')
+    # m7 = data[0:5].decode("utf-8")
+
+    ###アラーム
+    data = kv.read('M22.U')
+    m22 = data[0:5].decode("utf-8")
+
+    print("OK")
+
+except:
+    print("CONNECTION-ERROR")
 
 if(m0 == "00000" and m22 == "00000"):
     print("停止中")
@@ -114,23 +139,3 @@ elif( m0 == "00000" and m22 == "00001"):
     print("エラー")
 else:
     print("該当なし")
-# #単独運転-ゲートカット
-# data = kv.read('M1.U')
-# print(data)
-
-# #単独運転-ゲートカット＆画像検査
-# data = kv.read('M2.U')
-# print(data)
-
-# #単独運転-画像検査
-# data = kv.read('M3.U')
-# print(data)
-
-# #原点復帰
-# data = kv.read('M7.U')
-# print(data)
-
-#アラーム
-# data = kv.read('M22.U')
-# print(data)
-

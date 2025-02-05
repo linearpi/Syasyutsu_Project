@@ -7,7 +7,11 @@ use App\Models\Log;
 
 class PLCMonitor extends Component
 {
-    public $count = 1;
+    public $countA = 0;
+    public $countB = 0;
+    public $countC = 0;
+
+    public $is_connection_ok = "";
 
     /*成形機　データ */
     public $seikeiki_data = "";
@@ -29,6 +33,7 @@ class PLCMonitor extends Component
 
 
     /*成形品データ */
+    public $date_today = "";
     public $amo_today = 0;
     public $amo_good = 0;
     public $amo_bad = 0;
@@ -65,49 +70,58 @@ class PLCMonitor extends Component
 
 
     public function test_monitoring(){
+        $this->countA++;
         $output = [];
 
         exec("python3 ./python/kvhostlink.py",$output);   //Pythonからテストメッセージを取得
 
+        /*接続確認*/
+        $this->is_connection_ok = $output[0];
+
+        /* 動作状況の更新 */
+        $this->countB++;
+        if($this->is_connection_ok != "OK"){
+            $this->seikeiki_data = $output[1];
+            return;
+        }else if($this->is_connection_ok == "OK"){
+
             /*成形機　データ */
-        $this->seikeiki_data = $output[0];
-        //$this->seikeiki_error = $output[1];
-        $this->seikeiki_error = "ダミー";
+            $this->seikeiki_data = $output[1];
+            $this->seikeiki_error = "test-data";
 
-        /*アームロボット　データ */
-        $this->arm_data = "ダミー";
-        $this->arm_error = "ダミー";
+            /*アームロボット　データ */
+            $this->arm_data = "test-data";
+            $this->arm_error = "test-data";
 
-        /*ゲートカット　データ */
-        $this->gate_data = "ダミー";
-        $this->gate_error = "ダミー";
+            /*ゲートカット　データ */
+            $this->gate_data = "test-data";
+            $this->gate_error = "test-data";
 
-        /*画像処理用端末　データ */
-        $this->CVA_data = "ダミー";
-        $this->CVB_data = "ダミー";
-        $this->seikeihin_good = "ダミー";
-        $this->seikeihin_error = "ダミー";
+            /*画像処理用端末　データ */
+            $this->CVA_data = "test-data";
+            $this->CVB_data = "test-data";
+            $this->seikeihin_good = "test-data";
+            $this->seikeihin_error = "test-data";            
+        }
 
-/*******************************************************/
+    /*******************************************************/
         /*今日保存したデータから成形品の良品と不良品の個数を取得 */
-        date_default_timezone_set("Asia/Tokyo");
+        //date_default_timezone_set("Asia/Tokyo");
         $year = date("Y");
         $month = date("m");
         $date = date("d");
 
-        $q = $year."_".$month."_".$date;
+        $query = $year."-".$month."-".$date;
 
-        $this->amo_today = Log::whereDate("created_at",$q)->count();
+        $this->amo_today = Log::whereDate("created_at",$query)->count();
 
-        $this->amo_good = Log::whereDate("created_at",$q)->where("judgment","=","1")->count();
-        $this->amo_bad = Log::whereDate("created_at",$q)->where("judgment","=","0")->count();
+        $this->amo_good = Log::whereDate("created_at",$query)->where("judgment","=","1")->count();
+        $this->amo_bad = Log::whereDate("created_at",$query)->where("judgment","=","0")->count();
 
-/*******************************************************/
+    /*******************************************************/
+
+        $this->countC++;
     
-    }
-
-    public function exec_python(){
-        $output = exec("python3 ./python/hello.py");
     }
 
     public function render()
