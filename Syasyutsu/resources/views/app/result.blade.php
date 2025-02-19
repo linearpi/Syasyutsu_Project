@@ -109,13 +109,11 @@
 				<td>{{$log["width"]}}</td>
 				<td>{{$log["length"]}}</td>
 				<td>{{$log["height"]}}</td>
-				<td>
 					@if($log["judgment"] == 1)
-						良
+						<td style="background-color: blue;">良</td>
 					@else
-						不
+						<td style="background-color: red;">不</td>
 					@endif
-				</td>
 				<td>{{$log["year"]}}/{{$log["month"]}}/{{$log["day"]}}_{{$log["time"]}}</td>
 				<td>
 					<div id='{{ $log["id"] }}_img_upper'>
@@ -143,7 +141,7 @@
 								const timeout = new Promise((_, reject) => {
 									timer = setTimeout(() => {
 										reject(new Error("Timeout"));
-									}, 100); // 100ミリ秒（0.1秒）
+									}, 1000); // 100ミリ秒（0.1秒）
 								});
 
 								img.src = url;
