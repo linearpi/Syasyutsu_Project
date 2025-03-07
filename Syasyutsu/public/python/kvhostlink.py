@@ -139,3 +139,14 @@ elif( m0 == "00000" and m22 == "00001"):
     print("エラー")
 else:
     print("該当なし")
+
+#全接点の状態を格納
+m = []
+
+#全部の接点の状態を取得
+for i in range(100):
+    raw_data = kv.read('M{0}.U'.format(i))
+    data= raw_data[0:5].decode("utf-8")
+    m.append(data)
+    #print('M{0}.U : {1}'.format(i,data))
+
