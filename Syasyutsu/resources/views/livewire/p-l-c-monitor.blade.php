@@ -3,7 +3,7 @@
     <div class="headder">
         <div class="head w3-display-container w3-teal">
             <div class="w3-display-right">
-                <h1>PLC 動作状況確認ページ</h1>
+                <h1>作業監視画面ページ</h1>
             </div>
             <div class="w3-display-left">
                     <a href="/" style="text-decoration:none;">
@@ -34,29 +34,9 @@
                                     <th class="monitor-table-headder">モード</th>
                                     <td class="monitor-table-data">{{ $seikeiki_data }}</td>
                                 </tr>
-                            </table>
-                        </td>
-                        <td class="base-table-data">
-                            <table border="1" class="monitor-table">
                                 <tr class="monitor-table-row">
-                                    <th class="monitor-table-headder">CountB</th>
-                                    <td class="monitor-table-data">{{ $countB }}</td>
-                                </tr>
-                                <tr class="monitor-table-row">
-                                    <th class="monitor-table-headder">CountC</th>
-                                    <td class="monitor-table-data">{{ $countC }}</td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td class="base-table-data">
-                            <table border="1" class="monitor-table">
-                                <tr class="monitor-table-row">
-                                    <th class="monitor-table-headder">状態</th>
-                                    <td class="monitor-table-data">{{ $gate_data }}</td>
-                                </tr>
-                                <tr class="monitor-table-row">
-                                    <th class="monitor-table-headder">エラー数</th>
-                                    <td class="monitor-table-data">{{ $gate_error }}</td>
+                                    <th class="monitor-table-headder">状況</th>
+                                    <td class="monitor-table-data">{{ $seikeiki_data }}</td>
                                 </tr>
                             </table>
                         </td>

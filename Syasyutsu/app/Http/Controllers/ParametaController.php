@@ -21,6 +21,8 @@ class ParametaController extends Controller
 			"parametas"		=>	$parameta,
 		);
 
+		//return $data;
+
 		return view("app/result_parameta",$data);
 	}
 

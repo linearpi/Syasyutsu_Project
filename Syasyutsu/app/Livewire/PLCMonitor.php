@@ -73,7 +73,7 @@ class PLCMonitor extends Component
         $this->countA++;
         $output = [];
 
-        exec("python3 ./python/kvhostlink.py",$output);   //Pythonからテストメッセージを取得
+        exec("python3 ./python/connection_check.py",$output);   //Pythonからテストメッセージを取得
 
         /*接続確認*/
         $this->is_connection_ok = $output[0];

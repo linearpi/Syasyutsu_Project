@@ -54,10 +54,10 @@
 		<tr>
 			<th>番号</th>
 			<th>パラメータ名</th>
-			<th>thresh</th>
-			<th>max</th>
-			<th>bs</th>
-			<th>iteration</th>
+			<th>二値化閾値</th>
+			<th>横幅</th>
+			<th>縦幅</th>
+			<th>高さ</th>
 			<th>作成日</th>
 			<th>ACTIVE</th>
 			<th>ログ検索</th>
@@ -76,9 +76,9 @@
 				<td>{{$parameta["id"]}}</td>
 				<td>{{$parameta["name"]}}</td>
 				<td>{{$parameta["thresh"]}}</td>
-				<td>{{$parameta["max"]}}</td>
-				<td>{{$parameta["bs"]}}</td>
-				<td>{{$parameta["iteration"]}}</td>
+				<td>{{$parameta["width"]}}</td>
+				<td>{{$parameta["length"]}}</td>
+				<td>{{$parameta["height"]}}</td>
 				<td>{{$parameta["created_at"]}}</td>
 				<td>
 					@if($parameta["active"] == null)

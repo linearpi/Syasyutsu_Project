@@ -148,5 +148,5 @@ for i in range(100):
     raw_data = kv.read('M{0}.U'.format(i))
     data= raw_data[0:5].decode("utf-8")
     m.append(data)
-    #print('M{0}.U : {1}'.format(i,data))
+    print('M{0}.U : {1}'.format(i,data))
 
