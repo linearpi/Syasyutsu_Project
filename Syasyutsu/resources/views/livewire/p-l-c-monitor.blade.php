@@ -19,9 +19,7 @@
                 <table border="1" class="base-table">
                     <tr>
                         <th class="base-table-headder">システム</th>
-                        <th class="base-table-headder">カウント</th>
-                        <th class="base-table-headder">ゲートカット装置</th>
-                        <th class="base-table-headder">寸法測定システム</th>
+                        <th class="base-table-headder">成形品</th>
                     </tr>
                     <tr>
                         <td class="base-table-data">
