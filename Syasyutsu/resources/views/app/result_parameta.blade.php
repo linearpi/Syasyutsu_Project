@@ -6,7 +6,7 @@
 
 
 @section('headder')
-<div class="head w3-display-container w3-teal">
+<div class="content1 w3-display-container" style="overflow-x: auto;">
 	<div class="w3-display-right">
 		<h1>ログ検索ページ</h1>
 	</div>
