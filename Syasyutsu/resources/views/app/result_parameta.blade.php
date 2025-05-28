@@ -46,7 +46,7 @@
 
 
 
-<div class="content1 w3-display-container">
+<div class="content1 w3-display-container" style="overflow-x: auto;">
 	<div class="content3 w3-display-middle w3-display-container">
 
 	<table border="1" class="w3-display-middle">

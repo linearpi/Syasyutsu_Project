@@ -50,7 +50,7 @@
 
 	
 
-<div class="content1 w3-display-container">
+<div class="content1 w3-display-container" style="overflow-x: auto;">
 	<div class="content2 w3-display-topright">
 		<form action="{{ route('export/csv') }}" method="get">
 		@csrf
