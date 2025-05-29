@@ -50,6 +50,20 @@ td {
     white-space: normal;
 }
 
+/* 画像をダウンロードボタンがテーブルからはみ出る問題を修正する */
+th.image-dl,
+td.image-dl {
+    width: 150px;
+    max-width: 150px;
+}
+
+td.image-dl input[type="submit"] {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    font-size: 14px; /* 必要に応じて */
+}
+
 /* ページ送りを中央寄せ */
 .pagination {
     text-align: center;

@@ -29,8 +29,11 @@ class Downloader extends Controller
             // Add CSV headers
             fputcsv($handle, [
 				'id',
-				'name',
+				'name_upper',
+				'name_side',
+				'paraName',
 				'width',
+				'length',
 				'height',
 				'judgment',
 				'created_at',
@@ -148,43 +151,45 @@ class Downloader extends Controller
 
 
 
-    public function exportIMAGE(Request $request){
-        $log = json_decode($request->log);
+public function exportIMAGE(Request $request){
+    $log = json_decode($request->log);
 
-        //画像名を取得・Zip名を作成
-        $image_name_upper = $log->name_upper.".png";
-        $image_name_side = $log->name_side.".png";
-        $zip_name = "download.zip";
+    //画像名を取得・Zip名を作成
+    $image_name_upper = $log->name_upper.".png";
+    $image_name_side = $log->name_side.".png";
+    $zip_name = "download.zip";
 
-        //ヘッダーを作成
-        $headers	=	['Content-Type' => 'image/png'];
+    //画像が保存されているフォルダ
+    $folder = $log->year . "-" . $log->month . "-" . $log->day; // ハイフン区切り
 
-        //画像が保存されているフォルダ
-        $folder = $log->year."_".$log->month."_".$log->day;
+    $imageUrlUpper = route('image.serve', ['date' => $folder, 'filename' => $log->name_upper]);
+    $imageUrlSide = route('image.serve', ['date' => $folder, 'filename' => $log->name_side]);
 
-        //画像が保存されているリモートURL
-        $remoteURL_upper = "http://192.168.11.13/nas/pictures/".$folder."/".$image_name_upper;
-        $remoteURL_side = "http://192.168.11.13/nas/pictures/".$folder."/".$image_name_side;
-        
-        
-        //画像・Zipファイルを一時的に保存するフォルダ
-        $savePath = "/home/syasyutsu_user/store/";
-        $savePath_zip = $savePath.$zip_name;
-        $savePath_upper = $savePath."image_upper.png";
-        $savePath_side = $savePath."image_side.png";
+    $remoteURL_upper = $imageUrlUpper;
+    $remoteURL_side = $imageUrlSide;
 
-        //画像取得
-        $raw_image_upper = file_get_contents($remoteURL_upper);
-        $raw_image_side = file_get_contents($remoteURL_side);
-
-        //画像一時保存
-        file_put_contents($savePath_upper,$raw_image_upper);
-        file_put_contents($savePath_side,$raw_image_side);
-
-        //Zipファイルを指定フォルダに作成
-        Zip::create($zip_name,[$savePath_upper,$savePath_side])->saveTo($savePath);
-
-        return response()->download($savePath_zip,basename($savePath_zip),[])->deleteFileAfterSend(true);
+    // 保存先ディレクトリ（storage内）
+    $savePath = storage_path('app/tmp/');
+    if (!file_exists($savePath)) {
+        mkdir($savePath, 0755, true);
     }
+
+    $savePath_zip = $savePath . $zip_name;
+    $savePath_upper = $savePath . "image_upper.png";
+    $savePath_side = $savePath . "image_side.png";
+
+    //画像取得
+    $raw_image_upper = file_get_contents($remoteURL_upper);
+    $raw_image_side = file_get_contents($remoteURL_side);
+
+    //画像一時保存
+    file_put_contents($savePath_upper, $raw_image_upper);
+    file_put_contents($savePath_side, $raw_image_side);
+
+    //Zipファイルを指定フォルダに作成
+    Zip::create($zip_name, [$savePath_upper, $savePath_side])->saveTo($savePath);
+
+    return response()->download($savePath_zip, basename($savePath_zip), [])->deleteFileAfterSend(true);
+}
 
 }

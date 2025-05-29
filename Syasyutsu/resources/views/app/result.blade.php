@@ -98,7 +98,7 @@
                     <th>作成日</th>
                     <th>上部の画像</th>
                     <th>横側の画像</th>
-                    <th>画像DL</th>
+                    <th class="image-dl">画像DL</th>
                 </tr>
             </thead>
             <tbody>
@@ -154,14 +154,14 @@
         </a>
     </div>
 </td>
-                        <td>
-                            <form method="get" action="{{ route('export/image') }}">
-                                <input type="hidden" name="log" value="{{ $log }}" />
-                                <div id="{{ $log["id"] }}">
-                                    <input type="submit" value="画像ダウンロード" />
-                                </div>
-                            </form>
-                        </td>
+<td class="image-dl">
+    <form method="get" action="{{ route('export/image') }}">
+        <input type="hidden" name="log" value="{{ $log }}" />
+        <div style="max-width: 145px;">
+            <input type="submit" value="画像ダウンロード" style="width: 100%; padding: 5px;">
+        </div>
+    </form>
+</td>
                     </tr>
                     @endforeach
                 @endif
