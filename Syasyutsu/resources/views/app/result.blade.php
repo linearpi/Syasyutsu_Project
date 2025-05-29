@@ -205,6 +205,7 @@
 </script>
 
 {{ $logs->appends(request()->query())->links()}}
+
 @endsection
 
 
