@@ -56,6 +56,11 @@ return [
             'throw' => false,
         ],
 
+        /* NASへのルーティング用 */
+        'nas' => [
+            'driver' => 'local',
+            'root' => '/mnt/nas/pictures',
+        ],
     ],
 
     /*

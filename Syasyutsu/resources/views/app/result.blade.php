@@ -127,33 +127,33 @@
                             {{ $log["judgment"] == 1 ? '良' : '不' }}
                         </td>
 
+<td>{{ $log["created_at"] }}</td> {{-- ここ追加！ --}}
+
 @php
     $dateStr = $log["year"] . '_' . $log["month"] . '_' . $log["day"] . '_' . $log["time"];
     $escaped = e($dateStr);
     $withWbr = str_replace('_', '_<wbr>', $escaped);
+    // NASルーティング用
+    // 日付は1桁月日でハイフン区切り（ルーティングのdateパラメタ）
+    $datePath = $log['year'].'-'.$log['month'].'-'.$log['day'];
+    $imageUrlUpper = route('image.serve', ['date' => $datePath, 'filename' => $log['name_upper']]);
+    $imageUrlSide = route('image.serve', ['date' => $datePath, 'filename' => $log['name_side']]);
 @endphp
-<td>{!! $withWbr !!}</td>
 
-                        <td>
-                            <div id="{{ $log["id"] }}_img_upper">
-                                <a href="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.png"
-                                   data-lightbox="abc"
-                                   data-title="{{ $log['name'] }}">
-                                    <img src="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.png"
-                                         width="60px" alt="none">
-                                </a>
-                            </div>
-                        </td>
-                        <td>
-                            <div id="{{ $log["id"] }}_img_side">
-                                <a href="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_side'] }}.png"
-                                   data-lightbox="abc"
-                                   data-title="{{ $log['name'] }}">
-                                    <img src="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_side'] }}.png"
-                                         width="60px" alt="none">
-                                </a>
-                            </div>
-                        </td>
+<td>
+    <div id="{{ $log["id"] }}_img_upper">
+        <a href="{{ $imageUrlUpper }}" data-lightbox="abc" data-title="{{ $log['name'] }}">
+            <img src="{{ $imageUrlUpper }}" width="60px" alt="none">
+        </a>
+    </div>
+</td>
+<td>
+    <div id="{{ $log["id"] }}_img_side">
+        <a href="{{ $imageUrlSide }}" data-lightbox="abc" data-title="{{ $log['name'] }}">
+            <img src="{{ $imageUrlSide }}" width="60px" alt="none">
+        </a>
+    </div>
+</td>
                         <td>
                             <form method="get" action="{{ route('export/image') }}">
                                 <input type="hidden" name="log" value="{{ $log }}" />
@@ -190,13 +190,13 @@
     }
 
     @foreach($logs as $log)
-        chk("http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.png")
+        chk("{{ $imageUrlUpper }}")
             .catch(() => {
                 document.getElementById('{{ $log["id"] }}_img_upper').innerHTML = "none";
                 document.getElementById('{{ $log["id"] }}').innerHTML = "ダウン ロード不可";
             });
 
-        chk("http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_side'] }}.png")
+        chk("{{ $imageUrlSide }}")
             .catch(() => {
                 document.getElementById('{{ $log["id"] }}_img_side').innerHTML = "none";
                 document.getElementById('{{ $log["id"] }}').innerHTML = "ダウン ロード不可";

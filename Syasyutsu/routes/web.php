@@ -8,6 +8,10 @@ use App\Http\Controllers\Downloader;
 use App\Livewire\Counter;
 use App\Livewire\PLCMonitor;
 
+// NASのルーティング用
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
+
 /*
 Route::get('/', function () {
     return view('welcome');
@@ -56,3 +60,18 @@ Route::get('/counter', Counter::class);
 Route::get('export-csv', [Downloader::class, 'exportCSV'])->name('export/csv');
 //画像ダウンロード
 Route::get('export-image', [Downloader::class, 'exportIMAGE'])->name('export/image');
+
+// NASルーティング用
+Route::get('/image/{date}/{filename}', function ($date, $filename) {
+    // $date = '2025-2-21' の場合、そのままアンダースコアに置換
+    $dateDir = str_replace('-', '_', $date); // '2025_2_21'
+
+    $filePath = "/mnt/nas/pictures/{$dateDir}/{$filename}.png";
+
+    if (!file_exists($filePath)) {
+        abort(404, "File not found: {$filePath}");
+    }
+
+    return response()->file($filePath);
+})->where('date', '[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}')
+  ->name('image.serve');
