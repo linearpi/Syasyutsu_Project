@@ -68,3 +68,7 @@ td {
 .downlaod-label{
     font-size: 20px;
 }
+
+.bottom-links a {
+    position: relative;
+}
