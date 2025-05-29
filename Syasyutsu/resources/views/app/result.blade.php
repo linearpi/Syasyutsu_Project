@@ -50,7 +50,8 @@
 
 	
 
-<div class="content1 w3-display-container" style="overflow-x: auto;">
+<div class="content1 w3-display-container">
+
 	<div class="content2 w3-display-topright">
 		<form action="{{ route('export/csv') }}" method="get">
 		@csrf
@@ -66,8 +67,9 @@
 			</label>
 		</form>
 	</div>
-	<div class="content3 w3-display-middle w3-display-container">
-		<table border="1" class="w3-display-middle">
+<!--	<div class="content3 w3-display-middle w3-display-container">	-->
+		<div style="overflow-x: auto; width: 100%; padding: 0; margin: 0;">
+		<table border="1" class="w3-display-middle" style="width: 100%; min-width: 900px; border-collapse: collapse; margin: 0; padding: 0;">
 			<thead>
 			<tr>
 				<th class="id">番号</th>
@@ -190,7 +192,7 @@
 		@endif
 			</tbody>
 		</table>
-		
+		</div>
 	</div>
 </div>
 {{ $logs->appends(request()->query())->links()}}

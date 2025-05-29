@@ -19,6 +19,10 @@
     @yield("main")
 </div>
 
+<div class="bottom-links">
+    @yield('bottom-links')
+</div>
+
 <div class="footer">
     @yield("footer")
 </div>
