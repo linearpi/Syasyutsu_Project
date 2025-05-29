@@ -119,8 +119,9 @@ class AppController extends Controller
 			$parameta = 0;
 		}
 
+		// ログ検索結果の番号順序(asc: 昇順 desc: 降順)
 		$logs = Log::where('judgment',$parameta)
-			->orderBy("id","desc")->paginate(10);
+			->orderBy("id","asc")->paginate(10);
 
 
 		$data = array(

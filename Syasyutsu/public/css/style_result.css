@@ -43,6 +43,13 @@ th{
     height: 30px;
 }
 
+/* 特定の場所で改行 */
+td {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
 /* ページ送りを中央寄せ */
 .pagination {
     text-align: center;
