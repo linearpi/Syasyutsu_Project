@@ -154,6 +154,8 @@ class Downloader extends Controller
 public function exportIMAGE(Request $request){
     $log = json_decode($request->log);
 
+    \Log::debug('raw log payload: ' . json_encode($log));
+
     //画像名を取得・Zip名を作成
     $image_name_upper = $log->name_upper.".png";
     $image_name_side = $log->name_side.".png";
@@ -164,6 +166,9 @@ public function exportIMAGE(Request $request){
 
     $imageUrlUpper = route('image.serve', ['date' => $folder, 'filename' => $log->name_upper]);
     $imageUrlSide = route('image.serve', ['date' => $folder, 'filename' => $log->name_side]);
+
+    \Log::debug('imageUrlUpper: ' . $imageUrlUpper);
+    \Log::debug('imageUrlSide: ' . $imageUrlSide);
 
     $remoteURL_upper = $imageUrlUpper;
     $remoteURL_side = $imageUrlSide;
@@ -191,5 +196,6 @@ public function exportIMAGE(Request $request){
 
     return response()->download($savePath_zip, basename($savePath_zip), [])->deleteFileAfterSend(true);
 }
+
 
 }

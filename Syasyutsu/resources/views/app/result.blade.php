@@ -120,9 +120,10 @@
                                 <input type="submit" value="この値で検索">
                             </form>
                         </td>
-                        <td>{{ $log["width"] }}</td>
-                        <td>{{ $log["length"] }}</td>
-                        <td>{{ $log["height"] }}</td>
+			<!-- 小数第3位を四捨五入して小数第2位まで表示 -->
+                        <td>{{ round($log["width"], 2) }}</td>
+                        <td>{{ round($log["length"], 2) }}</td>
+                        <td>{{ round($log["height"], 2) }}</td>
                         <td style="background-color: {{ $log["judgment"] == 1 ? 'blue' : 'red' }};">
                             {{ $log["judgment"] == 1 ? '良' : '不' }}
                         </td>

@@ -54,3 +54,13 @@
 		</div>
 	</div>
 @endsection
+
+@section('script')
+<script>
+window.addEventListener('error', (e) => {
+  if (e.message.includes("Mixed Content")) {
+    console.warn('Mixed Content warning suppressed:', e.message);
+  }
+});
+</script>
+@endsection

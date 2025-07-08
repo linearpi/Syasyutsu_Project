@@ -75,3 +75,20 @@ Route::get('/image/{date}/{filename}', function ($date, $filename) {
     return response()->file($filePath);
 })->where('date', '[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}')
   ->name('image.serve');
+
+// NASルーティング(日付なし)
+Route::get('/image/{filename}', function ($filename) {
+    $filePath = "/mnt/nas/pictures/{$filename}";
+
+    if (!file_exists($filePath)) {
+        abort(404, "File not found: {$filePath}");
+    }
+
+    return response()->file($filePath);
+})->name('image.direct');
+
+Route::get('/pictures/{filename}', function ($filename) {
+    $path = "/mnt/nas/pictures/{$filename}";
+    if (!file_exists($path)) abort(404);
+    return response()->file($path);
+});
