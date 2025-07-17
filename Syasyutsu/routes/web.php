@@ -12,6 +12,9 @@ use App\Livewire\PLCMonitor;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 
+// 圧縮用
+use App\Http\Controllers\ImageCompareController;
+
 /*
 Route::get('/', function () {
     return view('welcome');
@@ -92,3 +95,7 @@ Route::get('/pictures/{filename}', function ($filename) {
     if (!file_exists($path)) abort(404);
     return response()->file($path);
 });
+
+// 圧縮用
+Route::get('/compare', [ImageCompareController::class, 'show']);
+
