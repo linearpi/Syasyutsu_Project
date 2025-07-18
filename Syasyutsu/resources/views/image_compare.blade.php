@@ -1,31 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>画像圧縮比較一覧</title>
-    <style>
-        img {
-            max-width: 300px;
-            margin-bottom: 10px;
-        }
-        .image-block {
-            margin-bottom: 40px;
-        }
-    </style>
-</head>
-<body>
-    <h1>画像圧縮比較一覧</h1>
+<h1>PNG 圧縮比較</h1>
 
-    <div class="image-block">
-        <h2>オリジナル</h2>
-        <img src="{{ $original }}" alt="Original Image"><br>
+<h2>10段階の事前圧縮画像</h2>
+@foreach($precompressed as $rate => $url)
+    <div style="margin:10px 0;">
+        <strong>compression_level: {{ $rate }}</strong><br>
+        <img src="{{ $url }}" style="max-width:300px;">
     </div>
+@endforeach
 
-    @foreach ($compressedImages as $img)
-        <div class="image-block">
-            <h2>圧縮 {{ $img['rate'] }}% 品質</h2>
-            <img src="{{ $img['url'] }}" alt="Compressed {{ $img['rate'] }}%">
-        </div>
-    @endforeach
-</body>
-</html>
+<hr>
+
+<h2>カスタム圧縮（0?9）</h2>
+<form method="POST" action="/compare/custom">
+    @csrf
+    <label for="compression">圧縮レベル (0?9):</label>
+    <input type="number" name="compression" id="compression" min="0" max="9" value="6">
+    <button type="submit">圧縮する</button>
+</form>
+
+@if($custom)
+    <h3>{{ $custom['rate'] }} のレベルで圧縮した PNG</h3>
+    <img src="{{ $custom['url'] }}" style="max-width:300px;">
+@endif

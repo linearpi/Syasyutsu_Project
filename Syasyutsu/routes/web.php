@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Response;
 
 // 圧縮用
 use App\Http\Controllers\ImageCompareController;
+// webp
+use App\Http\Controllers\WebpCompareController;
 
 /*
 Route::get('/', function () {
@@ -98,4 +100,6 @@ Route::get('/pictures/{filename}', function ($filename) {
 
 // 圧縮用
 Route::get('/compare', [ImageCompareController::class, 'show']);
-
+Route::post('/compare/custom', [ImageCompareController::class, 'compressCustom']);
+//webp
+Route::get('/compare-webp', [WebpCompareController::class, 'show']);
