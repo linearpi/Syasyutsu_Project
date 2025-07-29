@@ -1,0 +1,14 @@
+[Unit]
+Description=RTC 時刻同期 (SSH 経由)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=j2321304
+Environment=HOME=/home/j2321304
+ExecStart=/usr/local/bin/sync-rtc.sh
+
+[Install]
+WantedBy=multi-user.target
+

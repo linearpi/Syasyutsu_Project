@@ -1,0 +1,13 @@
+[Unit]
+Description=Website Warmup after Apache start
+After=apache2.service
+Wants=apache2.service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c '/usr/bin/curl --silent --fail --location "http://$(ip -o -4 addr show eth0 | awk '\''/inet/ {print $4}'\'' | cut -d/ -f1)/search/judgment?_token=...&method=judgment&q=warmup"'
+
+[Install]
+WantedBy=multi-user.target
