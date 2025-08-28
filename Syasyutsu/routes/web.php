@@ -38,6 +38,10 @@ Route::get('/search/parameta',function(){
 	return view('app/search_parameta');
 });
 
+/*横断検索　 ※  暫定、不要なら削除すること*/
+Route::get('/search/combined',function(){
+	return view('app/search_combined');
+});
 
 /* ログ検索結果 */
 Route::get('/search/all','App\Http\Controllers\AppController@search_all');
@@ -51,6 +55,14 @@ Route::get('/search/parameta/all','App\Http\Controllers\ParametaController@searc
 Route::get('/search/parameta/name','App\Http\Controllers\ParametaController@search_name');
 Route::get('/search/parameta/date','App\Http\Controllers\ParametaController@search_date');
 Route::get('/search/parameta/active','App\Http\Controllers\ParametaController@search_active');
+
+/*横断検索　 ※  暫定、不要なら削除すること*/
+Route::get('/search/combined/all', 'App\Http\Controllers\CombinedController@search_all');
+Route::get('/search/combined/paraName', 'App\Http\Controllers\CombinedController@search_paraName');
+Route::get('/search/combined/date', 'App\Http\Controllers\CombinedController@search_date');
+Route::get('/search/combined/range', 'App\Http\Controllers\CombinedController@search_range');
+Route::get('/search/combined/judgment', 'App\Http\Controllers\CombinedController@search_judgment');
+Route::get('/search/combined/active', 'App\Http\Controllers\CombinedController@search_active');
 
 
 Route::get('/test','App\Http\Controllers\AppController@test');

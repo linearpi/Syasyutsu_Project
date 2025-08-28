@@ -41,6 +41,11 @@
 			<button class="w3-display-bottommiddle w3-button w3-black" onclick="location.href='/search/parameta'" style="width: 30%; min-width: 100px;">
 				<p class="btn-msg">パラメータ検索</p>
 			</button>
+			<button class="w3-display-bottommiddle w3-button w3-black" 
+        onclick="location.href='/search/combined'" 
+        style="width: 30%; min-width: 100px; left: 125%; transform: translateX(-50%);">
+    <p class="btn-msg">統合横断検索</p>
+</button>
 
 		</div>
 	</div>   
