@@ -91,7 +91,8 @@ class CombinedController extends Controller
         $this->validateFields($request, 
 		[
 	            	'q1' => 'required',
-    	        	'q2' => 'required'
+    	        	'q2' => 'required',
+			'q2' => 'after_or_equal:q1'
   		],
 		[
 			'q1.required' => '開始日を指定してください。',
