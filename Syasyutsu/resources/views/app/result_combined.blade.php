@@ -48,8 +48,8 @@
     </form>
 </div>
 
+{{-- タブ切り替え用CSS --}}
 <style>
-/* タブ切替 */
 .tab-buttons {
     display: flex;
     border-bottom: 2px solid #ccc;
@@ -71,7 +71,7 @@
 .tab-content { display: none; }
 .tab-content.active { display: block; }
 
-/* トグルスイッチ */
+/* 詳細比較モード用 */
 .toggle {
     display: flex;
     align-items: center;
@@ -98,36 +98,39 @@
     border-radius: 50%;
     transition: transform 0.3s;
 }
-.toggle-button.active {
-    background-color: #4CAF50;
-}
-.toggle-button.active::before {
-    transform: translateX(26px);
-}
+.toggle-button.active { background-color: #4CAF50; }
+.toggle-button.active::before { transform: translateX(26px); }
 
-/* セクション区切り線 */
-.section-divider {
-    border-bottom: 2px solid #ccc;
+/* ログ／パラメータ ラベルの統一デザイン */
+.result-label {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 14px;
 }
-
-/* 横スクロール対応 */
-.scroll-wrapper {
-    overflow-x: auto;
-    cursor: grab;
-    margin-top: 8px;
+.log-label {
+    background-color: rgba(0, 120, 200, 0.2); /* 青系 */
+    color: #005080;
 }
-.scroll-wrapper:active {
-    cursor: grabbing;
+.param-label {
+    background-color: rgba(255, 165, 0, 0.2); /* オレンジ系 */
+    color: #b35900;
 }
-table {
-    border-collapse: collapse;
-    min-width: 900px;
-}
-th, td {
-    border: 1px solid #ccc;
-    padding: 6px;
-    white-space: nowrap;
-}
+/* 検索ページの強調表示  */
+        .back-link {
+            display: inline-block;
+width: 198.61px;
+            margin-top: 20px;
+            text-decoration: none;
+            background-color: #007acc;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 4px;
+        }
+        .back-link:hover {
+            background-color: #005f99;
+        }
 </style>
 
 {{-- タブボタン --}}
@@ -150,9 +153,9 @@ th, td {
             <span id="detailStatus">オフ</span>
         </div>
     </h4>
-    <div class="scroll-wrapper">
+    <div style="overflow-x:auto;">
         @if((isset($logs) && count($logs)) || (isset($parametas) && count($parametas)))
-            <table>
+            <table border="1" style="width:100%; min-width:900px; border-collapse: collapse;">
                 <thead>
                     <tr>
                         <th>種別</th><th>番号</th><th>名称</th><th>横幅</th><th>縦幅</th><th>高さ</th><th>作成日</th>
@@ -162,8 +165,8 @@ th, td {
                 <tbody>
                     @if(isset($logs))
                         @foreach($logs as $lIndex => $log)
-                            <tr @if($lIndex === count($logs)-1 && count($logs) > 0) class="section-divider" @endif>
-                                <td><span class="w3-tag w3-round w3-blue">📄 ログ</span></td>
+                            <tr>
+                                <td><span class="result-label log-label">📄 ログ</span></td>
                                 <td>{{ $log["id"] }}</td>
                                 <td>{{ $log["paraName"] }}</td>
                                 <td>{{ round($log["width"], 2) }}</td>
@@ -178,7 +181,7 @@ th, td {
                     @if(isset($parametas))
                         @foreach($parametas as $p)
                             <tr>
-                                <td><span class="w3-tag w3-round w3-orange">⚙️ パラメータ</span></td>
+                                <td><span class="result-label param-label">⚙️ パラメータ</span></td>
                                 <td>{{ $p["id"] }}</td>
                                 <td>{{ $p["name"] }}</td>
                                 <td>{{ $p["width"] }}</td>
@@ -201,8 +204,8 @@ th, td {
 {{-- ログタブ --}}
 @if(isset($logs))
 <div id="tab-logs" class="tab-content">
-    <div class="scroll-wrapper">
-        <table>
+    <div style="overflow-x:auto;">
+        <table border="1" style="width: 100%; min-width: 1200px; border-collapse: collapse;">
             <thead>
                 <tr>
                     <th>番号</th><th>画像名(上)</th><th>画像名(横)</th><th>パラ メータ名</th>
@@ -237,8 +240,8 @@ th, td {
 {{-- パラメータタブ --}}
 @if(isset($parametas) && count($parametas) > 0)
 <div id="tab-params" class="tab-content">
-    <div class="scroll-wrapper">
-        <table>
+    <div style="overflow-x:auto;">
+        <table border="1" style="width: 100%; min-width: 900px; border-collapse: collapse;">
             <thead>
                 <tr>
                     <th>番号</th><th>パラメータ名</th><th>二値化閾値</th><th>横 幅</th>
@@ -265,7 +268,7 @@ th, td {
 </div>
 @endif
 
-{{-- JS: タブ切替 & 詳細トグル & 横スクロールドラッグ --}}
+{{-- タブ切り替え用JS + 詳細比較モードJS --}}
 <script>
 document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -288,35 +291,18 @@ if (detailToggle) {
             col.style.display = isActive ? '' : 'none';
         });
     });
+    // 初期状態は非表示
     document.querySelectorAll('.detail-col').forEach(col => col.style.display = 'none');
 }
-
-// 横スクロール (ドラッグ操作)
-document.querySelectorAll('.scroll-wrapper').forEach(wrapper => {
-    let isDown = false;
-    let startX, scrollLeft;
-    wrapper.addEventListener('mousedown', (e) => {
-        isDown = true;
-        startX = e.pageX - wrapper.offsetLeft;
-        scrollLeft = wrapper.scrollLeft;
-    });
-    wrapper.addEventListener('mouseleave', () => isDown = false);
-    wrapper.addEventListener('mouseup', () => isDown = false);
-    wrapper.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - wrapper.offsetLeft;
-        const walk = (x - startX);
-        wrapper.scrollLeft = scrollLeft - walk;
-    });
-});
 </script>
 
 @endsection
 
 @section('bottom-links')
 <hr>
-<a href='/search/combined'>統合検索ページへ戻る</a>
+<a href="{{ url('/search/combined') }}" class="back-link">🔍有検索ページへ戻る</a>
+
 <br>
-<a href='/index'>トップページへ戻る</a>
+<a href="{{ url('/index') }}" class="back-link">🏠トップページへ戻る</a>
 @endsection
+
