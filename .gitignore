@@ -1,0 +1,5 @@
+a.php
+# 生成物や不要画像を無視
+Syasyutsu/public/images/compressed_*
+Syasyutsu/public/images/custom_*
+Syasyutsu/public/images/original.lossless.webp
