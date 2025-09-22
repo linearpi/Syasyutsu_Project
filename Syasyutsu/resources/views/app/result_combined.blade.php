@@ -3,7 +3,7 @@
 
 @section('title','統合検索結果ページ')
 
-@section('headder')
+@section('header')
 <div class="head w3-display-container w3-teal">
     <div class="w3-display-right">
         <h1>統合検索結果ページ</h1>
@@ -131,6 +131,26 @@ width: 198.61px;
         .back-link:hover {
             background-color: #005f99;
         }
+/*横スクロールバー掴みやすさ */
+.scroll-area {
+  overflow-x: auto;
+  padding-bottom: 8px; /* スクロールバーの下に余白を確保 */
+}
+
+.scroll-area::-webkit-scrollbar {
+  height: 10px;
+}
+.scroll-area::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 5px;
+}
+.scroll-area::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+.scroll-area::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
 </style>
 
 {{-- タブボタン --}}
@@ -155,6 +175,7 @@ width: 198.61px;
     </h4>
     <div style="overflow-x:auto;">
         @if((isset($logs) && count($logs)) || (isset($parametas) && count($parametas)))
+<div class="scroll-area">
             <table border="1" style="width:100%; min-width:900px; border-collapse: collapse;">
                 <thead>
                     <tr>
@@ -198,6 +219,7 @@ width: 198.61px;
         @else
             <p>該当する結果はありません。</p>
         @endif
+</div>
     </div>
 </div>
 

@@ -2,7 +2,7 @@
 
 @section('title','統合検索ページ')
 
-@section('headder')
+@section('header')
 <div class="head w3-display-container w3-teal">
     <div class="w3-display-right">
         <h1>統合検索ページ</h1>

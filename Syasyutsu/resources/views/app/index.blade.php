@@ -3,7 +3,7 @@
 @section('title','トップページ')
 
 
-@section('headder')
+@section('header')
 <div class="head w3-display-container w3-teal">
 	<div class="w3-display-right">
 		<h1>トップページ</h1>

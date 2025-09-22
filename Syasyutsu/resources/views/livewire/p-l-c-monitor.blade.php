@@ -1,6 +1,6 @@
 <div class="root">
 
-    <div class="headder">
+    <div class="header">
         <div class="head w3-display-container w3-teal">
             <div class="w3-display-right">
                 <h1>作業監視画面ページ</h1>

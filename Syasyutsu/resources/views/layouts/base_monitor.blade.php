@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
 </head>
 <body>
-<div class="headder">
-        @yield("headder")
+<div class="header">
+        @yield("header")
     </div>
 
     <div class="main">
