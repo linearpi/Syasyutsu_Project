@@ -1,0 +1,384 @@
+{{-- resources/views/app/result_combined.blade.php --}}
+@extends('layouts.base_result')
+
+@section('title', '統合検索結果ページ')
+
+@section('header')
+<div class="head w3-display-container w3-teal">
+    <div class="w3-display-right">
+        <h1>統合検索結果ページ</h1>
+    </div>
+    <div class="w3-display-left">
+        <a href="/" style="text-decoration:none;">
+            <p class="w3-sans-serif">LOGO&emsp;</p>
+        </a>
+    </div>
+</div>
+@endsection
+
+@section('main')
+<div class="result-msg">
+    @switch($method)
+        @case('all')
+            <p>検索：全期間検索</p>
+            @break
+        @case('paraName')
+            <p>検索：パラメータ名検索</p>
+            <p>内容：{{ $q }}</p>
+            @break
+        @case('date')
+            <p>検索：日付検索</p>
+            <p>内容：{{ $q }}</p>
+            @break
+        @case('range')
+            <p>検索：期間検索</p>
+            <p>内容：{{ $q1 }} ~ {{ $q2 }}</p>
+            @break
+        @case('judgment')
+            <p>検索：良品・不良品検索</p>
+            <p>内容：{{ $q }}</p>
+            @break
+        @case('active')
+            <p>検索：ACTIVE検索</p>
+            <p>内容：{{ $q }}</p>
+            @break
+    @endswitch
+
+    @if (isset($logs))
+        <p>{{ $logs->total() }}件中 {{ count($logs) }}件表示</p>
+    @endif
+</div>
+
+{{-- CSVダウンロード --}}
+<div class="download-toolbar" style="padding: 10px; text-align: right;">
+    <form action="{{ route('export/csv') }}" method="get">
+        @csrf
+        <input type="hidden" name="method" value="{{ $method }}">
+
+        @if ($method == 'range')
+            <input type="hidden" name="q1" value="{{ $q1 }}">
+            <input type="hidden" name="q2" value="{{ $q2 }}">
+        @else
+            <input type="hidden" name="q" value="{{ $q }}">
+        @endif
+
+        <input class="download-btn" type="submit" value="CSVダウンロード">
+    </form>
+</div>
+
+{{-- タブ切り替え用CSS --}}
+<style>
+    .tab-buttons {
+        display: flex;
+        border-bottom: 2px solid #ccc;
+        margin-bottom: 10px;
+    }
+    .tab-buttons button {
+        flex: 1;
+        padding: 10px;
+        cursor: pointer;
+        background: #f1f1f1;
+        border: none;
+        outline: none;
+        transition: background 0.3s;
+    }
+    .tab-buttons button.active {
+        background: #ccc;
+        font-weight: bold;
+    }
+    .tab-content {
+        display: none;
+    }
+    .tab-content.active {
+        display: block;
+    }
+
+    /* 詳細比較モード用 */
+    .toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        margin-left: 1em;
+    }
+    .toggle-button {
+        position: relative;
+        width: 50px;
+        height: 24px;
+        background-color: #ccc;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .toggle-button::before {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 20px;
+        height: 20px;
+        background-color: white;
+        border-radius: 50%;
+        transition: transform 0.3s;
+    }
+    .toggle-button.active {
+        background-color: #4CAF50;
+    }
+    .toggle-button.active::before {
+        transform: translateX(26px);
+    }
+
+    /* ログ／パラメータ ラベルの統一デザイン */
+    .result-label {
+        display: inline-block;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 14px;
+    }
+    .log-label {
+        background-color: rgba(0, 120, 200, 0.2); /* 青系 */
+        color: #005080;
+    }
+    .param-label {
+        background-color: rgba(255, 165, 0, 0.2); /* オレンジ系 */
+        color: #b35900;
+    }
+
+    /* 検索ページの強調表示 */
+    .back-link {
+        display: inline-block;
+        width: 198.61px;
+        margin-top: 20px;
+        text-decoration: none;
+        background-color: #007acc;
+        color: white;
+        padding: 8px 14px;
+        border-radius: 4px;
+    }
+    .back-link:hover {
+        background-color: #005f99;
+    }
+
+    /* 横スクロールバー掴みやすさ */
+    .scroll-area {
+        overflow-x: auto;
+        padding-bottom: 8px; /* スクロールバーの下に余白を確保 */
+    }
+    .scroll-area::-webkit-scrollbar {
+        height: 10px;
+    }
+    .scroll-area::-webkit-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 5px;
+    }
+    .scroll-area::-webkit-scrollbar-thumb:hover {
+        background-color: #555;
+    }
+    .scroll-area::-webkit-scrollbar-track {
+        background-color: #f1f1f1;
+    }
+</style>
+
+{{-- タブボタン --}}
+<div class="tab-buttons">
+    <button class="tab-btn active" data-tab="all">全体結果</button>
+    @if (isset($logs))
+        <button class="tab-btn" data-tab="logs">ログ結果</button>
+    @endif
+    @if (isset($parametas) && count($parametas) > 0)
+        <button class="tab-btn" data-tab="params">パラメータ結果</button>
+    @endif
+</div>
+
+{{-- 全体タブ --}}
+<div id="tab-all" class="tab-content active">
+    <h4 style="display:flex; align-items:center;">
+        詳細比較モード
+        <div class="toggle">
+            <div class="toggle-button" id="detailToggle"></div>
+            <span id="detailStatus">オフ</span>
+        </div>
+    </h4>
+
+    <div style="overflow-x:auto;">
+        @if ((isset($logs) && count($logs)) || (isset($parametas) && count($parametas)))
+            <div class="scroll-area">
+                <table border="1" style="width:100%; min-width:900px; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th>種別</th>
+                            <th>番号</th>
+                            <th>名称</th>
+                            <th>横幅</th>
+                            <th>縦幅</th>
+                            <th>高さ</th>
+                            <th>作成日</th>
+                            <th class="detail-col">詳細1</th>
+                            <th class="detail-col">詳細2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (isset($logs))
+                            @foreach ($logs as $lIndex => $log)
+                                <tr>
+                                    <td><span class="result-label log-label">📄ログ</span></td>
+                                    <td>{{ $log['id'] }}</td>
+                                    <td>{{ $log['paraName'] }}</td>
+                                    <td>{{ round($log['width'], 2) }}</td>
+                                    <td>{{ round($log['length'], 2) }}</td>
+                                    <td>{{ round($log['height'], 2) }}</td>
+                                    <td>{{ $log['created_at'] }}</td>
+                                    <td class="detail-col">{{ $log['name_upper'] ?? '' }}</td>
+                                    <td class="detail-col">{{ $log['judgment'] == 1 ? '良' : '不' }}</td>
+                                </tr>
+                            @endforeach
+                        @endif
+
+                        @if (isset($parametas))
+                            @foreach ($parametas as $p)
+                                <tr>
+                                    <td><span class="result-label param-label">⚙️パラメータ</span></td>
+                                    <td>{{ $p['id'] }}</td>
+                                    <td>{{ $p['name'] }}</td>
+                                    <td>{{ $p['width'] }}</td>
+                                    <td>{{ $p['length'] }}</td>
+                                    <td>{{ $p['height'] }}</td>
+                                    <td>{{ $p['created_at'] }}</td>
+                                    <td class="detail-col">{{ $p['thresh'] ?? '' }}</td>
+                                    <td class="detail-col">{{ $p['active'] ? 'ACTIVE' : 'INACTIVE' }}</td>
+                                </tr>
+                            @endforeach
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <p>該当する結果はありません。</p>
+        @endif
+    </div>
+</div>
+
+{{-- ログタブ --}}
+@if (isset($logs))
+<div id="tab-logs" class="tab-content">
+    <div style="overflow-x:auto;">
+        <table border="1" style="width: 100%; min-width: 1200px; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>番号</th>
+                    <th>画像名(上)</th>
+                    <th>画像名(横)</th>
+                    <th>パラメータ名</th>
+                    <th>横幅</th>
+                    <th>縦幅</th>
+                    <th>高さ</th>
+                    <th>判定</th>
+                    <th>作成日</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($logs as $log)
+                    <tr>
+                        <td>{{ $log['id'] }}</td>
+                        <td>{{ $log['name_upper'] }}</td>
+                        <td>{{ $log['name_side'] }}</td>
+                        <td>{{ $log['paraName'] }}</td>
+                        <td>{{ round($log['width'], 2) }}</td>
+                        <td>{{ round($log['length'], 2) }}</td>
+                        <td>{{ round($log['height'], 2) }}</td>
+                        <td style="background-color: {{ $log['judgment'] == 1 ? 'blue' : 'red' }};">
+                            {{ $log['judgment'] == 1 ? '良' : '不' }}
+                        </td>
+                        <td>{{ $log['created_at'] }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="9">テーブルデータが存在しません。</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
+    {{ $logs->appends(request()->query())->links() }}
+</div>
+@endif
+
+{{-- パラメータタブ --}}
+@if (isset($parametas) && count($parametas) > 0)
+<div id="tab-params" class="tab-content">
+    <div style="overflow-x:auto;">
+        <table border="1" style="width: 100%; min-width: 900px; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>番号</th>
+                    <th>パラメータ名</th>
+                    <th>二値化閾値</th>
+                    <th>横幅</th>
+                    <th>縦幅</th>
+                    <th>高さ</th>
+                    <th>作成日</th>
+                    <th>ACTIVE</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($parametas as $parameta)
+                    <tr>
+                        <td>{{ $parameta['id'] }}</td>
+                        <td>{{ $parameta['name'] }}</td>
+                        <td>{{ $parameta['thresh'] }}</td>
+                        <td>{{ $parameta['width'] }}</td>
+                        <td>{{ $parameta['length'] }}</td>
+                        <td>{{ $parameta['height'] }}</td>
+                        <td>{{ $parameta['created_at'] }}</td>
+                        <td>{{ $parameta['active'] ? 'ACTIVE' : 'INACTIVE' }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    {{ $parametas->appends(request()->query())->links() }}
+</div>
+@endif
+
+{{-- タブ切り替え用JS + 詳細比較モードJS --}}
+<script>
+    // タブ切り替え
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            const target = document.getElementById('tab-' + btn.dataset.tab);
+            if (target) target.classList.add('active');
+        });
+    });
+
+    // 詳細比較モード
+    const detailToggle = document.getElementById('detailToggle');
+    const detailStatus = document.getElementById('detailStatus');
+
+    if (detailToggle) {
+        detailToggle.addEventListener('click', () => {
+            detailToggle.classList.toggle('active');
+            const isActive = detailToggle.classList.contains('active');
+            detailStatus.textContent = isActive ? 'オン' : 'オフ';
+            document.querySelectorAll('.detail-col').forEach(col => {
+                col.style.display = isActive ? '' : 'none';
+            });
+        });
+
+        // 初期状態は非表示
+        document.querySelectorAll('.detail-col').forEach(col => col.style.display = 'none');
+    }
+</script>
+@endsection
+
+@section('bottom-links')
+<hr>
+<a href="{{ url('/search/combined') }}" class="back-link">🔍 統合検索ページへ戻る</a>
+<br>
+<a href="{{ url('/index') }}" class="back-link">🏠 トップページへ戻る</a>
+@endsection

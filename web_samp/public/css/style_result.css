@@ -1,0 +1,88 @@
+.head{
+    width: 100%;
+    height: 100px;
+}
+
+.head p{
+    font-size: 50px;   
+    font-weight: bold;
+    font-style: italic;
+}
+
+.content1{
+    position: relative;
+    width: 100%;
+    height: 900px;
+    background-position: center;
+    background-size: cover;
+}
+
+.content2{
+    width: auto;
+}
+
+.content3{
+    width: 3500px;
+}
+
+.download-btn{
+    width: 200px;
+    height: 70px;
+    font-size: 20px;
+}
+
+table{
+    /*width: 1300px;*/
+    font-size: 20px;
+    text-align: center;
+}
+
+th{
+    max-width: 200px;
+    width: 150px;
+    height: 30px;
+}
+
+/* 特定の場所で改行 */
+td {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+/* 画像をダウンロードボタンがテーブルからはみ出る問題を修正する */
+th.image-dl,
+td.image-dl {
+    width: 150px;
+    max-width: 150px;
+}
+
+td.image-dl input[type="submit"] {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    font-size: 14px; /* 必要に応じて */
+}
+
+/* ページ送りを中央寄せ */
+.pagination {
+    text-align: center;
+}
+
+/* ページ送りを横並びに */
+.pagination li{
+    display: inline-block;
+    font-size: 18px;
+}
+
+.result-msg p{
+    font-size: 20px;
+}
+
+.downlaod-label{
+    font-size: 20px;
+}
+
+.bottom-links a {
+    position: relative;
+}

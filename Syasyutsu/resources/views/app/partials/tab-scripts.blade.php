@@ -1,0 +1,147 @@
+{{-- tab-scripts.blade.php --}}
+
+{{-- タブ切り替え用CSS --}}
+<style>
+    .tab-buttons {
+        display: flex;
+        border-bottom: 2px solid #ccc;
+        margin-bottom: 10px;
+    }
+    .tab-buttons button {
+        flex: 1;
+        padding: 10px;
+        cursor: pointer;
+        background: #f1f1f1;
+        border: none;
+        outline: none;
+        transition: background 0.3s;
+    }
+    .tab-buttons button.active {
+        background: #ccc;
+        font-weight: bold;
+    }
+    .tab-content {
+        display: none;
+    }
+    .tab-content.active {
+        display: block;
+    }
+
+    /* 詳細比較モード用 */
+    .toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        margin-left: 1em;
+    }
+    .toggle-button {
+        position: relative;
+        width: 50px;
+        height: 24px;
+        background-color: #ccc;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .toggle-button::before {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 20px;
+        height: 20px;
+        background-color: white;
+        border-radius: 50%;
+        transition: transform 0.3s;
+    }
+    .toggle-button.active {
+        background-color: #4CAF50;
+    }
+    .toggle-button.active::before {
+        transform: translateX(26px);
+    }
+
+    /* ログ／パラメータ ラベルの統一デザイン */
+    .result-label {
+        display: inline-block;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 14px;
+    }
+    .log-label {
+        background-color: rgba(0, 120, 200, 0.2); /* 青系 */
+        color: #005080;
+    }
+    .param-label {
+        background-color: rgba(255, 165, 0, 0.2); /* オレンジ系 */
+        color: #b35900;
+    }
+
+    /* 検索ページの強調表示 */
+    .back-link {
+        display: inline-block;
+        width: 198.61px;
+        margin-top: 20px;
+        text-decoration: none;
+        background-color: #007acc;
+        color: white;
+        padding: 8px 14px;
+        border-radius: 4px;
+    }
+    .back-link:hover {
+        background-color: #005f99;
+    }
+
+    /* 横スクロールバー掴みやすさ */
+    .scroll-area {
+        overflow-x: auto;
+        padding-bottom: 8px; /* スクロールバーの下に余白を確保 */
+    }
+    .scroll-area::-webkit-scrollbar {
+        height: 10px;
+    }
+    .scroll-area::-webkit-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 5px;
+    }
+    .scroll-area::-webkit-scrollbar-thumb:hover {
+        background-color: #555;
+    }
+    .scroll-area::-webkit-scrollbar-track {
+        background-color: #f1f1f1;
+    }
+</style>
+
+{{-- タブ切り替え用JS + 詳細比較モードJS --}}
+<script>
+    // タブ切り替え
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            const target = document.getElementById('tab-' + btn.dataset.tab);
+            if (target) target.classList.add('active');
+        });
+    });
+
+    // 詳細比較モード
+    const detailToggle = document.getElementById('detailToggle');
+    const detailStatus = document.getElementById('detailStatus');
+
+    if (detailToggle) {
+        detailToggle.addEventListener('click', () => {
+            detailToggle.classList.toggle('active');
+            const isActive = detailToggle.classList.contains('active');
+            detailStatus.textContent = isActive ? 'オン' : 'オフ';
+            document.querySelectorAll('.detail-col').forEach(col => {
+                col.style.display = isActive ? '' : 'none';
+            });
+        });
+
+        // 初期状態は非表示
+        document.querySelectorAll('.detail-col').forEach(col => col.style.display = 'none');
+    }
+</script>
