@@ -21,7 +21,7 @@ class CombinedController extends Controller
      */
     public function search_all(Request $request)
     {
-        $logs = Log::orderBy('id','desc')->paginate(10);
+        $logs = Log::orderBy('id','asc')->paginate(10);
         $parametas = Parameta::paginate(10);
 
         return view('app/result_combined', [

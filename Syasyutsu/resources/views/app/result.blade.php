@@ -105,66 +105,100 @@
                 @if(!isset($logs[0]))
                     <tr><td colspan="13">NO DATA EXISTS!!</td></tr>
                 @else
-                    @foreach($logs as $log)
-                    <tr>
-                        <td>{{ $log["id"] }}</td>
-
-                        <td>{!! str_replace('_', '_<wbr>', e($log["name_upper"])) !!}</td>
-                        <td>{!! str_replace('_', '_<wbr>', e($log["name_side"])) !!}</td>
-                        <td>{!! str_replace('_', '_<wbr>', e($log["paraName"])) !!}</td>
-                        <td>
-                            <form action="/search/parameta/name" method="GET">
-                                @csrf
-                                <input type="hidden" name="q" value="{{ $log['paraName'] }}">
-                                <input type="hidden" name="method" value="name" />
-                                <input type="submit" value="この値で検索">
-                            </form>
-                        </td>
-			<!-- 小数第3位を四捨五入して小数第2位まで表示 -->
-                        <td>{{ round($log["width"], 2) }}</td>
-                        <td>{{ round($log["length"], 2) }}</td>
-                        <td>{{ round($log["height"], 2) }}</td>
-                        <td style="background-color: {{ $log["judgment"] == 1 ? 'blue' : 'red' }};">
-                            {{ $log["judgment"] == 1 ? '良' : '不' }}
-                        </td>
-
-<td>{{ $log["created_at"] }}</td> {{-- ここ追加！ --}}
-
+@foreach($logs as $log)
 @php
-    $dateStr = $log["year"] . '_' . $log["month"] . '_' . $log["day"] . '_' . $log["time"];
-    $escaped = e($dateStr);
-    $withWbr = str_replace('_', '_<wbr>', $escaped);
-    // NASルーティング用
-    // 日付は1桁月日でハイフン区切り（ルーティングのdateパラメタ）
-    $datePath = $log['year'].'-'.$log['month'].'-'.$log['day'];
-    $imageUrlUpper = route('image.serve', ['date' => $datePath, 'filename' => $log['name_upper']]);
-    $imageUrlSide = route('image.serve', ['date' => $datePath, 'filename' => $log['name_side']]);
+    // created_at -> date/time からベース文字列を作る
+    $dt = isset($log['created_at']) ? explode(' ', $log['created_at']) : [null, null];
+    $datePart = $dt[0] ?? '';
+    $timePart = $dt[1] ?? '';
+
+    // YYYY-MM-DD を分解してゼロなしに
+    $year = (int)substr($datePart, 0, 4);
+    $month = (int)substr($datePart, 5, 2);
+    $day = (int)substr($datePart, 8, 2);
+    $datePath = "{$year}-{$month}-{$day}";  // ← ゼロを削除したルート用文字列
+
+    // created_at を "_" 区切りに変換（画像名補完用）
+    $dateStr = sprintf("%04d_%02d_%02d_%s",
+        $year, $month, $day,
+        str_replace(':', '', $timePart)
+    );
+
+    // 表示用の名前
+    $displayParaName  = !empty($log['paraName']) ? $log['paraName'] : $dateStr;
+    $displayNameUpper = !empty($log['name_upper']) ? $log['name_upper'] : ($dateStr ? $dateStr . '_a' : null);
+    $displayNameSide  = !empty($log['name_side'])  ? $log['name_side']  : ($dateStr ? $dateStr . '_b' : null);
+
+    // 画像URLを生成
+    $imageUrlUpper = ($displayNameUpper && $datePath)
+        ? route('image.serve', ['date' => $datePath, 'filename' => $displayNameUpper])
+        : null;
+
+    $imageUrlSide = ($displayNameSide && $datePath)
+        ? route('image.serve', ['date' => $datePath, 'filename' => $displayNameSide])
+        : null;
 @endphp
 
-<td>
-    <div id="{{ $log["id"] }}_img_upper">
-        <a href="{{ $imageUrlUpper }}" data-lightbox="abc" data-title="{{ $log['name'] }}">
-            <img src="{{ $imageUrlUpper }}" width="60px" alt="none">
-        </a>
-    </div>
-</td>
-<td>
-    <div id="{{ $log["id"] }}_img_side">
-        <a href="{{ $imageUrlSide }}" data-lightbox="abc" data-title="{{ $log['name'] }}">
-            <img src="{{ $imageUrlSide }}" width="60px" alt="none">
-        </a>
-    </div>
-</td>
-<td class="image-dl">
-    <form method="get" action="{{ route('export/image') }}">
-        <input type="hidden" name="log" value="{{ $log }}" />
-        <div style="max-width: 145px;">
-            <input type="submit" value="画像ダウンロード" style="width: 100%; padding: 5px;">
-        </div>
-    </form>
-</td>
-                    </tr>
-                    @endforeach
+    <tr>
+        <td>{{ $log['id'] }}</td>
+
+        <td>{!! $displayNameUpper ? str_replace('_','_<wbr>', e($displayNameUpper)) : '&nbsp;' !!}</td>
+        <td>{!! $displayNameSide ? str_replace('_','_<wbr>', e($displayNameSide)) : '&nbsp;' !!}</td>
+        <td>{!! $displayParaName ? str_replace('_','_<wbr>', e($displayParaName)) : '&nbsp;' !!}</td>
+
+        <td>
+            @if($displayParaName)
+                <form action="/search/parameta/name" method="GET">
+                    @csrf
+                    <input type="hidden" name="q" value="{{ $displayParaName }}">
+                    <input type="hidden" name="method" value="name" />
+                    <input type="submit" value="この値で検索">
+                </form>
+            @else
+                <span style="color: gray;">—</span>
+            @endif
+        </td>
+
+        <td>{{ isset($log['width']) ? round($log['width'],2) : '' }}</td>
+        <td>{{ isset($log['length']) ? round($log['length'],2) : '' }}</td>
+        <td>{{ isset($log['height']) ? round($log['height'],2) : '' }}</td>
+
+        <td style="background-color: {{ $log['judgment'] == 1 ? 'blue' : 'red' }};">
+            {{ $log['judgment'] == 1 ? '良' : '不' }}
+        </td>
+
+        <td>{{ $log['created_at'] ?? '' }}</td>
+
+        <td id="cell_upper_{{ $log['id'] }}">
+            @if($imageUrlUpper)
+                <a href="{{ $imageUrlUpper }}" data-lightbox="abc" data-title="{{ $displayNameUpper }}">
+                    <img id="img_upper_{{ $log['id'] }}" src="{{ $imageUrlUpper }}" width="60px" alt="upper">
+                </a>
+            @else
+                <span style="color: gray;">なし</span>
+            @endif
+        </td>
+
+        <td id="cell_side_{{ $log['id'] }}">
+            @if($imageUrlSide)
+                <a href="{{ $imageUrlSide }}" data-lightbox="abc" data-title="{{ $displayNameSide }}">
+                    <img id="img_side_{{ $log['id'] }}" src="{{ $imageUrlSide }}" width="60px" alt="side">
+                </a>
+            @else
+                <span style="color: gray;">なし</span>
+            @endif
+        </td>
+
+        <td class="image-dl">
+            <form method="get" action="{{ route('export/image') }}">
+                <input type="hidden" name="log_id" value="{{ $log['id'] }}" />
+                <div style="max-width: 145px;">
+                    <input type="submit" value="画像ダウンロード" style="width: 100%; padding: 5px;">
+                </div>
+            </form>
+        </td>
+    </tr>
+@endforeach
                 @endif
             </tbody>
         </table>
@@ -187,7 +221,15 @@
                 reject(url);
             };
             img.src = url;
-        });
+        }).catch(() => {
+    const el = document.getElementById('{{ $log["id"] }}_img_upper');
+    if (el) {
+        el.innerHTML = '<img src="/image/no_image.png" width="60px">';
+    } else {
+        console.warn("Element not found for ID:", '{{ $log["id"] }}_img_upper');
+    }
+});
+
     }
 
     @foreach($logs as $log)

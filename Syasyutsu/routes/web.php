@@ -17,6 +17,9 @@ use App\Http\Controllers\ImageCompareController;
 // webp
 use App\Http\Controllers\WebpCompareController;
 
+// グラフ
+use App\Http\Controllers\GraphController;
+
 /*
 Route::get('/', function () {
     return view('welcome');
@@ -115,3 +118,11 @@ Route::get('/compare', [ImageCompareController::class, 'show']);
 Route::post('/compare/custom', [ImageCompareController::class, 'compressCustom']);
 //webp
 Route::get('/compare-webp', [WebpCompareController::class, 'show']);
+
+// グラフ
+Route::get('/app/date-input', function () {
+    return view('app.date_input'); // resources/views/app/date_input.blade.phpを指します
+});
+
+Route::post('/app/generate-graph', [GraphController::class, 'generateGraph']);
+

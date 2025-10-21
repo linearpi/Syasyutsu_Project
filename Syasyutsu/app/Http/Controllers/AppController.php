@@ -22,7 +22,7 @@ class AppController extends Controller
 	{
 
 		//$logs = Log::all();
-		$logs = Log::orderBy("id","desc")->paginate(10);
+		$logs = Log::orderBy("id", "asc")->paginate(10);
 
 
 		$data = array(
@@ -43,7 +43,7 @@ class AppController extends Controller
 
 
 		$logs = Log::orWhere('paraName','like','%'.$request->q.'%')
-		->orderBy("id","desc")->paginate(10);
+		->orderBy("id","asc")->paginate(10);
 
 
 
@@ -64,7 +64,7 @@ class AppController extends Controller
 		]);
 
 		$logs = Log::whereDate('created_at',$request->q)
-			->orderBy("id","desc")->paginate(10);
+			->orderBy("id","asc")->paginate(10);
 
 
 		$data = array(
@@ -90,7 +90,7 @@ class AppController extends Controller
 		
 		//データを検索
 		$logs = Log::whereBetween('created_at',[$old_period,$new_period])
-			->orderBy("id","desc")->paginate(10);
+			->orderBy("id","asc")->paginate(10);
 
 
 		//クライアントへ送信するデータをまとめる
