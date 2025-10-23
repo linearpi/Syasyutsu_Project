@@ -152,23 +152,23 @@ class Downloader extends Controller
         $log = json_decode($request->log);
 
         //画像名を取得・Zip名を作成
-        $image_name_upper = $log->name_upper.".png";
-        $image_name_side = $log->name_side.".png";
+        $image_name_upper = $log->name_upper;
+        $image_name_side = $log->name_side;
         $zip_name = "download.zip";
 
         //ヘッダーを作成
         $headers	=	['Content-Type' => 'image/png'];
 
         //画像が保存されているフォルダ
-        $folder = $log->year."_".$log->month."_".$log->day;
+        $folder = $log->year."-".$log->month."-".$log->day;
 
         //画像が保存されているリモートURL
-        $remoteURL_upper = "http://192.168.11.13/nas/pictures/".$folder."/".$image_name_upper;
-        $remoteURL_side = "http://192.168.11.13/nas/pictures/".$folder."/".$image_name_side;
+        $remoteURL_upper = "http://192.168.50.155/image/".$folder."/".$image_name_upper;
+        $remoteURL_side = "http://192.168.50.155/image/".$folder."/".$image_name_side;
         
         
         //画像・Zipファイルを一時的に保存するフォルダ
-        $savePath = "/home/syasyutsu_user/store/";
+        $savePath =  storage_path("app/tmp/");
         $savePath_zip = $savePath.$zip_name;
         $savePath_upper = $savePath."image_upper.png";
         $savePath_side = $savePath."image_side.png";

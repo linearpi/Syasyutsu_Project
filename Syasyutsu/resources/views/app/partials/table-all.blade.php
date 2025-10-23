@@ -1,4 +1,12 @@
 <div id="tab-all" class="tab-content active">
+    <div class="counts" data-tab="all" style="display:none;">
+        @if(isset($logs))
+            <p>ログ：{{ $logs->total() }}件中 {{ $logs->count() }}件表示</p>
+        @endif
+        @if(isset($parametas))
+            <p>パラメータ：{{ $parametas->total() }}件中 {{ $parametas->count() }}件表示</p>
+        @endif
+    </div>
     <h4 style="display:flex; align-items:center;">
         詳細比較モード
         <div class="toggle">

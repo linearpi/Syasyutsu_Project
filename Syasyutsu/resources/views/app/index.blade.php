@@ -29,33 +29,24 @@
 				</div>
 			</div>
 		</div>    
-	</div>
-	<div class="content2 w3-display-container">
-		<div class="w3-display-bottommiddle w3-display-container" style="width: 50%; min-width: 500px; background-color: red;">
-			<button class="w3-display-bottomright w3-button w3-black" onclick="location.href='/search'" style="width: 30%; min-width: 100px;">
-				<p class="btn-msg">ログ検索</p>
-			</button>
-			<button class="w3-display-bottomleft w3-button w3-black" onclick="location.href='/monitor'" style="width: 30%; min-width: 100px;">
-				<p class="btn-msg">作業監視</p>
-			</button>
-			<button class="w3-display-bottommiddle w3-button w3-black" onclick="location.href='/search/parameta'" style="width: 30%; min-width: 100px;">
-				<p class="btn-msg">パラメータ検索</p>
-			</button>
-			<button class="w3-display-bottommiddle w3-button w3-black" 
-        onclick="location.href='/search/combined'" 
-        style="width: 30%; min-width: 100px; left: 125%; transform: translateX(-50%);">
-    <p class="btn-msg">統合横断検索</p>
-</button>
-
-		</div>
-	</div>   
+        </div>
+        <div class="content2 w3-display-container">
+                <div class="w3-display-bottommiddle w3-display-container" style="width: 50%; min-width: 500px; background-color: red;">
+                        <button class="w3-display-bottomright w3-button w3-black" onclick="location.href='/search/combined'" style="width: 30%; min-width: 100px;">
+                                <p class="btn-msg">ログ検索</p>
+                        </button>
+                        <button class="w3-display-bottomleft w3-button w3-black" onclick="location.href='/monitor'" style="width: 30%; min-width: 100px;">
+                                <p class="btn-msg">作業監視</p>
+                        </button>
+                </div>
+        </div>
 @endsection
 
 
 @section("footer")
 	<div class="content3 w3-display-container">
 		<div class="w3-display-bottomright">
-			<p>作成日　2024/12/4(水)&emsp;</p>
+			<p>作成日　2025/10/21(火)&emsp;</p>
 		</div>
 	</div>
 @endsection
@@ -68,5 +59,5 @@ window.addEventListener('error', (e) => {
   }
 });
 </script>
-<a href="http://192.168.50.155:8000" class="back-link">🔁 旧バージョンへ</a><br>
+<a href="http://192.168.50.155:8080" class="back-link">🔁 旧バージョンへ</a><br>
 @endsection

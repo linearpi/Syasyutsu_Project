@@ -1,12 +1,21 @@
 {{-- パラメータタブ --}}
-@if(isset($parametas) && count($parametas) > 0)
 <div id="tab-params" class="tab-content">
+    <div class="counts" data-tab="params" style="display:none;">
+        <p>パラメータ：{{ $parametas->total() }}件中 {{ $parametas->count() }}件表示</p>
+    </div>
     <div style="overflow-x:auto;">
         <table border="1" style="width: 100%; min-width: 900px; border-collapse: collapse;">
             <thead>
                 <tr>
-                    <th>番号</th><th>パラメータ名</th><th>二値化閾値</th><th>横 幅</th>
-                    <th>縦幅</th><th>高さ</th><th>作成日</th><th>ACTIVE</th><th>ログ検索</th>
+                    <th>番号</th>
+                    <th>パラメータ名</th>
+                    <th>二値化閾値</th>
+                    <th>横幅</th>
+                    <th>縦幅</th>
+                    <th>高さ</th>
+                    <th>作成日</th>
+                    <th>ACTIVE</th>
+                    <th>ログ検索</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,4 +43,3 @@
     </div>
     {{ $parametas->appends(request()->query())->links() }}
 </div>
-@endif

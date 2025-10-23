@@ -1,3 +1,4 @@
+{{-- CSVダウンロード --}}
 <div class="download-toolbar" style="padding: 10px; text-align: right;">
     <form action="{{ route('export/csv') }}" method="get">
         @csrf

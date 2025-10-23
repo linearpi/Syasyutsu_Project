@@ -8,7 +8,6 @@
         @case("active")    <p>検索：ACTIVE検索</p><p>内容：{{ $q }}</p> @break
     @endswitch
 
-    @if(isset($logs))
-        <p>{{ $logs->total() }}件中 {{ count($logs) }}件表示</p>
-    @endif
+{{-- 件数表示用フック --}}
+<div id="result-counts"></div>
 </div>
