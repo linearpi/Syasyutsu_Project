@@ -2,7 +2,7 @@
 
 @section('title','日付設定ページ')
 
-@section('headder')
+@section('header')
 <div class="head w3-display-container w3-teal">
     <div class="w3-display-right">
         <h1>グラフ生成ページ</h1>

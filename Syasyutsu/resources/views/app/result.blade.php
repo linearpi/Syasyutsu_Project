@@ -207,8 +207,9 @@
 
 
 {{-- チェック用スクリプト：tableの外にまとめる --}}
+{{-- チェック用スクリプト --}}
 <script>
-    function chk(url) {
+    function chk(url, onError) {
         return new Promise((resolve, reject) => {
             const img = new Image();
             const timer = setTimeout(() => reject(new Error("Timeout")), 1000);
@@ -221,31 +222,27 @@
                 reject(url);
             };
             img.src = url;
-        }).catch(() => {
-    const el = document.getElementById('{{ $log["id"] }}_img_upper');
-    if (el) {
-        el.innerHTML = '<img src="/image/no_image.png" width="60px">';
-    } else {
-        console.warn("Element not found for ID:", '{{ $log["id"] }}_img_upper');
+        }).catch(onError);
     }
-});
-
-    }
-
-    @foreach($logs as $log)
-        chk("{{ $imageUrlUpper }}")
-            .catch(() => {
-                document.getElementById('{{ $log["id"] }}_img_upper').innerHTML = "none";
-                document.getElementById('{{ $log["id"] }}').innerHTML = "ダウン ロード不可";
-            });
-
-        chk("{{ $imageUrlSide }}")
-            .catch(() => {
-                document.getElementById('{{ $log["id"] }}_img_side').innerHTML = "none";
-                document.getElementById('{{ $log["id"] }}').innerHTML = "ダウン ロード不可";
-            });
-    @endforeach
 </script>
+
+@foreach($logs as $log)
+<script>
+    chk("{{ $imageUrlUpper }}", () => {
+        const el = document.getElementById('img_upper_{{ $log->id }}');
+        if (el) {
+            el.src = "/image/no_image.png";
+        }
+    });
+
+    chk("{{ $imageUrlSide }}", () => {
+        const el = document.getElementById('img_side_{{ $log->id }}');
+        if (el) {
+            el.src = "/image/no_image.png";
+        }
+    });
+</script>
+@endforeach
 
 {{ $logs->appends(request()->query())->links()}}
 

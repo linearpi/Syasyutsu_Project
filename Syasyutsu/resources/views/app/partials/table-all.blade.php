@@ -7,6 +7,7 @@
             <p>パラメータ：{{ $parametas->total() }}件中 {{ $parametas->count() }}件表示</p>
         @endif
     </div>
+
     <h4 style="display:flex; align-items:center;">
         詳細比較モード
         <div class="toggle">
@@ -14,18 +15,26 @@
             <span id="detailStatus">オフ</span>
         </div>
     </h4>
+
     <div class="scroll-area">
-        @if((isset($logs) && count($logs)) || (isset($parametas) && count($parametas)))
-            <table border="1" style="width:100%; min-width:900px; border-collapse: collapse;">
+        @if((isset($logs) && $logs->count()) || (isset($parametas) && $parametas->count()))
+            <table border="1" style="width:100%; min-width:900px; border-collapse: collapse; table-layout: fixed;">
                 <thead>
                     <tr>
-                        <th>種別</th><th>番号</th><th>名称</th><th>横幅</th><th>縦幅</th><th>高さ</th><th>作成日</th>
-                        <th class="detail-col">詳細1</th><th class="detail-col">詳細2</th>
+                        <th>種別</th>
+                        <th>番号</th>
+                        <th>名称</th>
+                        <th>横幅</th>
+                        <th>縦幅</th>
+                        <th>高さ</th>
+                        <th>作成日</th>
+                        <th class="detail-col">詳細1</th>
+                        <th class="detail-col">詳細2</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @includeWhen(isset($logs), 'app.partials.table-all-logs')
-                    @includeWhen(isset($parametas), 'app.partials.table-all-params')
+                    @includeWhen(isset($logs) && $logs->count(), 'app.partials.table-all-logs')
+                    @includeWhen(isset($parametas) && $parametas->count(), 'app.partials.table-all-params')
                 </tbody>
             </table>
         @else

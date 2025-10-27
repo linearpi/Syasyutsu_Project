@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use phpseclib3\Net\SSH2;
-use phpseclib3\Net\SFTP;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class GraphController extends Controller
 {
@@ -19,30 +19,25 @@ class GraphController extends Controller
         $endTime   = $request->input('end_time', '23:59');
 
         Log::info("GraphController: 入力日付 => {$year}-{$month}-{$day} {$startTime}-{$endTime}");
-　　　　　　//ここの値を使用するラズパイ
-        $host = '192.168.50.154';　　
-        $username = 'j2421312';
-        $password = 'mUB72jL';
-　　　　　　//
-        $ssh = new SSH2($host);
-        if (!$ssh->login($username, $password)) {
-            Log::error("SSH接続失敗");
-            return back()->withErrors(['error' => 'ラズパイへのSSH接続に失敗しました。']);
-        }
 
-        $remoteDir = "/home/j2421312/output_images/{$year}_{$month}_{$day}";
-        $command = "source ~/myenv/bin/activate && python3 ~/gurahu_laravel.py $year $month $day $startTime $endTime";
+        // Python 実行コマンド（仮想環境を有効化してスクリプト実行）
+        $command = "bash -c 'export MPLCONFIGDIR=/tmp/mplconfig && source /home/j2321304/myenv/bin/activate && python3 /home/j2321304/gurahu_laravel.py $year $month $day $startTime $endTime'";
         Log::info("Python 実行コマンド: {$command}");
-        $output = $ssh->exec($command);
-        Log::info("Python 実行結果: " . $output);
 
-        $sftp = new SFTP($host);
-        if (!$sftp->login($username, $password)) {
-            Log::error("SFTP接続失敗");
-            return back()->withErrors(['error' => 'SFTPログインに失敗しました。']);
+        $process = Process::fromShellCommandline($command);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            Log::error("Python 実行失敗: " . $process->getErrorOutput());
+            return back()->withErrors(['error' => 'Python スクリプトの実行に失敗しました。']);
         }
 
+        Log::info("Python 実行結果: " . $process->getOutput());
+
+        // 画像取得元ディレクトリ（Pythonが生成した画像）
+        $remoteDir = "/home/j2321304/output_images/{$year}_{$month}_{$day}";
         $localDir = public_path('output_images');
+
         if (!File::exists($localDir)) {
             File::makeDirectory($localDir, 0777, true);
         }
@@ -55,17 +50,16 @@ class GraphController extends Controller
             $localFileName = "{$year}_{$month}_{$day}_{$name}";
             $localPath = "{$localDir}/{$localFileName}";
 
-            $fileContent = $sftp->get($remotePath);
-            if ($fileContent === false) {
-                Log::error("取得失敗: {$remotePath}");
-                return back()->withErrors(['error' => "{$name} の取得に失敗しました。"]);
+            if (!File::exists($remotePath)) {
+                Log::error("ファイルが存在しません: {$remotePath}");
+                return back()->withErrors(['error' => "{$name} が見つかりません。"]);
             }
 
-            file_put_contents($localPath, $fileContent);
+            File::copy($remotePath, $localPath);
             $imageUrls[] = asset("output_images/{$localFileName}");
         }
 
-        return view('app.graph_display', [
+        return view('app.result_graphdisplay', [
             'year' => $year,
             'month' => $month,
             'day' => $day,

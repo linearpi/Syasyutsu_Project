@@ -18,7 +18,7 @@
 
 @section('main')
     @include('app.partials.search-summary')
-    @include('app.partials.csv-download')
+    @include('app.partials.button-group')
     @include('app.partials.tab-styles')
     @include('app.partials.tab-buttons')
     @include('app.partials.table-all')

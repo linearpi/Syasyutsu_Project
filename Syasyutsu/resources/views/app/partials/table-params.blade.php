@@ -19,7 +19,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($parametas as $parameta)
+                @forelse($parametas as $parameta)
                     <tr>
                         <td>{{ $parameta["id"] }}</td>
                         <td>{{ $parameta["name"] }}</td>
@@ -30,14 +30,18 @@
                         <td>{{ $parameta["created_at"] }}</td>
                         <td>{{ $parameta["active"] ? 'ACTIVE' : 'INACTIVE' }}</td>
                         <td>
-    <form method="get" action="/search/paraName">
-        <input type="hidden" name="method" value="param" />
-        <input type="hidden" name="q" value="{{ $parameta['name'] }}" />
-        <input type="submit" value="ログを見る" />
-    </form>
-</td>
+                            <form method="get" action="/search/paraName">
+                                <input type="hidden" name="method" value="param" />
+                                <input type="hidden" name="q" value="{{ $parameta['name'] }}" />
+                                <input type="submit" value="この値で検索" />
+                            </form>
+                        </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="9">テーブルデータが存在しません。</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

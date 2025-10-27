@@ -3,3 +3,5 @@ a.php
 Syasyutsu/public/images/compressed_*
 Syasyutsu/public/images/custom_*
 Syasyutsu/public/images/original.lossless.webp
+Syasyutsu/python/.venv
+Syasyutsu/public/output_images
