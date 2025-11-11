@@ -8,7 +8,7 @@ import datetime
 # DB 接続情報
 conn = mysql.connector.connect(
     host="192.168.50.155",      # MariaDB サーバーのホスト
-    user="j2321304",      # MariaDB ユーザー
+    user="laravel_user",      # MariaDB ユーザー
     password="web",  # MariaDB パスワード
     database="Syasyutsu"   # データベース名
 )

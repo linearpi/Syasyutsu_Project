@@ -37,8 +37,8 @@ Route::get('/search',function(){
 });
 
 /* パラメタ検索 */
-Route::get('/search/parameta',function(){
-	return view('app/search_parameta');
+Route::get('/search/params',function(){
+	return view('app/search_params');
 });
 
 /*横断検索　 ※  暫定、不要なら削除すること*/
@@ -54,10 +54,10 @@ Route::get('/search/range','App\Http\Controllers\AppController@search_range');
 Route::get('/search/judgment','App\Http\Controllers\AppController@search_judgment');
 
 /* パラメタ検索結果 */
-Route::get('/search/parameta/all','App\Http\Controllers\ParametaController@search_all');
-Route::get('/search/parameta/name','App\Http\Controllers\ParametaController@search_name');
-Route::get('/search/parameta/date','App\Http\Controllers\ParametaController@search_date');
-Route::get('/search/parameta/active','App\Http\Controllers\ParametaController@search_active');
+Route::get('/search/params/all','App\Http\Controllers\ParamController@search_all');
+Route::get('/search/params/name','App\Http\Controllers\ParamController@search_name');
+Route::get('/search/params/date','App\Http\Controllers\ParamController@search_date');
+Route::get('/search/params/active','App\Http\Controllers\ParamController@search_active');
 
 /*横断検索　 ※  暫定、不要なら削除すること*/
 Route::get('/search/combined/all', 'App\Http\Controllers\CombinedController@search_all');
@@ -79,7 +79,7 @@ Route::get('/counter', Counter::class);
 //CSVダウンロード
 Route::get('export-csv', [Downloader::class, 'exportCSV'])->name('export/csv');
 //画像ダウンロード
-Route::get('export-image', [Downloader::class, 'exportIMAGE'])->name('export/image');
+Route::get('export-image', [Downloader::class, 'exportIMAGE'])->name('export.image');
 
 // NASルーティング用
 Route::get('/image/{date}/{filename}', function ($date, $filename) {
@@ -97,15 +97,41 @@ Route::get('/image/{date}/{filename}', function ($date, $filename) {
   ->name('image.serve');
 
 // NASルーティング(日付なし)
-Route::get('/image/{filename}', function ($filename) {
-    $filePath = "/mnt/nas/pictures/{$filename}";
+// routes/web.php
+Route::get('/image/{date}/{filename}', function (string $date, string $filename) {
+    // URLの日付は 2025-10-30、NASは 2025_10_30 想定
+    $dirDate = str_replace('-', '_', $date);
+    $dir = "/mnt/nas/pictures/{$dirDate}";
 
-    if (!file_exists($filePath)) {
-        abort(404, "File not found: {$filePath}");
+    $path = "{$dir}/{$filename}";
+
+    if (!is_file($path)) {
+        // セキュリティのため、拡張子無しで来た場合は拒否 or 補助
+        // 補助したい場合は以下のように補完（任意）
+        // foreach (['png','jpg','jpeg','webp'] as $ext) {
+        //     if (is_file("{$dir}/{$filename}.{$ext}")) {
+        //         $path = "{$dir}/{$filename}.{$ext}";
+        //         break;
+        //     }
+        // }
     }
 
-    return response()->file($filePath);
-})->name('image.direct');
+    abort_unless(is_file($path), 404, '画像が見つかりません');
+
+    // Content-Type を適切に設定
+    $mime = match (strtolower(pathinfo($path, PATHINFO_EXTENSION))) {
+        'png'  => 'image/png',
+        'jpg', 'jpeg' => 'image/jpeg',
+        'webp' => 'image/webp',
+        default => mime_content_type($path) ?: 'application/octet-stream',
+    };
+
+    return response()->file($path, [
+        'Content-Type' => $mime,
+        // キャッシュを効かせたい場合は以下を設定（任意）
+        // 'Cache-Control' => 'public, max-age=31536000',
+    ]);
+})->name('image.serve');
 
 Route::get('/pictures/{filename}', function ($filename) {
     $path = "/mnt/nas/pictures/{$filename}";
@@ -126,3 +152,4 @@ Route::get('/app/date-input', function () {
 
 Route::post('/app/generate-graph', [GraphController::class, 'generateGraph']);
 
+Route::get('/show-image', [Downloader::class, 'showIMAGE'])->name('show.image');

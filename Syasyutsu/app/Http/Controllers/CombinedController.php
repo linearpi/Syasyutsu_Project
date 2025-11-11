@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Log;
-use App\Models\Parameta;
+use App\Models\Param;
 
 class CombinedController extends Controller
 {
@@ -22,13 +22,13 @@ class CombinedController extends Controller
     public function search_all(Request $request)
     {
         $logs = Log::orderBy('id','asc')->paginate(10);
-        $parametas = Parameta::paginate(10);
+        $params = Param::paginate(10);
 
         return view('app/result_combined', [
             'method' => 'all',
             'q' => 'all',
             'logs' => $logs,
-            'parametas' => $parametas
+            'params' => $params
         ]);
     }
 

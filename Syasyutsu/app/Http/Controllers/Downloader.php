@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log as LaravelLog;
 use App\Models\Log;
 use ZipArchive;
 
@@ -49,8 +50,8 @@ class Downloader extends Controller
                 $time  = str_replace(':', '', $timePart);
 
                 $paraName  = "{$year}_{$month}_{$day}_{$time}";
-                $nameUpper = $paraName . '_a';
-                $nameSide  = $paraName . '_b';
+                $nameUpper = $paraName . '_cam_id0';
+                $nameSide  = $paraName . '_cam_id1';
 
                 $data = [
                     $log->id,
@@ -146,72 +147,165 @@ public function exportParamCSV(Request $request)
 
 public function exportIMAGE(Request $request)
 {
-    // log_id で再取得
-    $log = \App\Models\Log::find($request->log_id);
-
-    if (!$log) {
-        abort(404, 'ログが見つかりません');
+    $logId = $request->query('log_id');
+    if (!$logId) {
+        abort(400, 'log_id が指定されていません');
     }
 
-    // 画像名を取得・Zip名を作成
-    $image_name_upper = ($log->name_upper ?? 'no_name') . ".png";
-    $image_name_side  = ($log->name_side  ?? 'no_name') . ".png";
-    $zip_name = "download.zip";
+    LaravelLog::info('exportIMAGE called', ['log_id' => $logId]);
 
-    // created_at から年・月・日を抽出（ゼロ埋めなし）
-    $createdAt = (string)$log->created_at;
-    [$datePart, $timePart] = explode(' ', $createdAt);
-
-    $year  = (int)substr($datePart, 0, 4); // 例: '2025' → 12025
-    $month = (int)substr($datePart, 5, 2); // 例: '10' → 10
-    $day   = (int)substr($datePart, 8, 2); // 例: '07' → 7
-    
-// 時刻（コロンを除去して "135649" にする）
-$time  = str_replace(':', '', $timePart);
-
-$paraName   = sprintf("%04d_%02d_%02d_%s", $year, $month, $day, $time);
-$nameUpper  = $paraName . '_a';
-$nameSide   = $paraName . '_b';
-
-    $folder = "{$year}-{$month}-{$day}"; // → '12025-10-7'
-
-    $imageUrlUpper = route('image.serve', ['date' => $folder, 'filename' => $nameUpper]);
-    $imageUrlSide  = route('image.serve', ['date' => $folder, 'filename' => $nameSide]);
-
-    // 保存先ディレクトリ
-    $savePath = storage_path('app/tmp/');
-    if (!file_exists($savePath)) {
-        mkdir($savePath, 0755, true);
+    // DB から log_id に対応する作成日時を取得
+    $logTimestamp = \DB::table('logs')->where('id', $logId)->value('created_at');
+    if (!$logTimestamp) {
+        abort(404, '指定された log_id は存在しません');
     }
 
-    $savePath_zip   = $savePath . $zip_name;
-    $savePath_upper = $savePath . "image_upper.png";
-    $savePath_side  = $savePath . "image_side.png";
+    $logDate = date('Y_m_d', strtotime($logTimestamp));
+    $dir = "/mnt/nas/pictures/{$logDate}";
 
-    // 画像取得
-    $raw_image_upper = file_get_contents($imageUrlUpper);
-    $raw_image_side  = file_get_contents($imageUrlSide);
+    if (!is_dir($dir)) {
+        LaravelLog::warning('Directory not found', ['dir' => $dir]);
+        abort(404, '画像ディレクトリが存在しません');
+    }
 
-    // 一時保存
-    file_put_contents($savePath_upper, $raw_image_upper);
-    file_put_contents($savePath_side, $raw_image_side);
+    $upperFiles = glob($dir . '/*_cam_id0.*');
+    $sideFiles  = glob($dir . '/*_cam_id1.*');
 
-        // ZipArchive を使って圧縮
-// created_at から生成したファイル名を使う
-$nameUpper  = $paraName . '_a.png';
-$nameSide   = $paraName . '_b.png';
+    LaravelLog::info('file listing', [
+        'logTimestamp' => $logTimestamp,
+        'dir' => $dir,
+        'upper_count' => count($upperFiles),
+        'side_count' => count($sideFiles)
+    ]);
 
-// ZipArchive を使って圧縮
-$zip = new ZipArchive;
-if ($zip->open($savePath_zip, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
-    $zip->addFile($savePath_upper, $nameUpper);
-    $zip->addFile($savePath_side, $nameSide);
-    $zip->close();
-} else {
-    abort(500, 'Zipファイルの作成に失敗しました');
+    if (empty($upperFiles) || empty($sideFiles)) {
+        abort(404, '画像が見つかりません');
+    }
+
+    $logTs = strtotime($logTimestamp);
+    $thresholdSec = 10;
+
+    // upper 選択
+    $closestUpper = null;
+    $minDiffUpper = PHP_INT_MAX;
+    foreach ($upperFiles as $f) {
+        $ts = $this->extractTimestamp($f);
+        if ($ts === 0) {
+            LaravelLog::warning('timestamp extraction failed (upper)', ['file' => $f]);
+            continue;
+        }
+        $diff = abs($logTs - $ts);
+        LaravelLog::debug('upper candidate', [
+            'file' => $f,
+            'file_ts' => $ts,
+            'diff_sec' => $diff,
+        ]);
+        if ($diff < $minDiffUpper) {
+            $minDiffUpper = $diff;
+            $closestUpper = $f;
+        }
+    }
+
+    // side 選択
+    $closestSide = null;
+    $minDiffSide = PHP_INT_MAX;
+    foreach ($sideFiles as $f) {
+        $ts = $this->extractTimestamp($f);
+        if ($ts === 0) {
+            LaravelLog::warning('timestamp extraction failed (side)', ['file' => $f]);
+            continue;
+        }
+        $diff = abs($logTs - $ts);
+        LaravelLog::debug('side candidate', [
+            'file' => $f,
+            'file_ts' => $ts,
+            'diff_sec' => $diff,
+        ]);
+        if ($diff < $minDiffSide) {
+            $minDiffSide = $diff;
+            $closestSide = $f;
+        }
+    }
+
+    if (!$closestUpper || !$closestSide) {
+        LaravelLog::warning('No image pair found', ['log_id' => $logId]);
+        abort(404, '画像ペアが見つかりません');
+    }
+
+    // しきい値超過の警告
+    if ($minDiffUpper > $thresholdSec) {
+        LaravelLog::warning('upper image exceeds threshold', [
+            'selected' => basename($closestUpper),
+            'minDiff_sec' => $minDiffUpper,
+            'threshold_sec' => $thresholdSec
+        ]);
+    }
+    if ($minDiffSide > $thresholdSec) {
+        LaravelLog::warning('side image exceeds threshold', [
+            'selected' => basename($closestSide),
+            'minDiff_sec' => $minDiffSide,
+            'threshold_sec' => $thresholdSec
+        ]);
+    }
+
+    LaravelLog::info('nearest selection', [
+        'closest_upper' => basename($closestUpper),
+        'closest_side' => basename($closestSide),
+        'minDiff_upper_sec' => $minDiffUpper,
+        'minDiff_side_sec' => $minDiffSide,
+    ]);
+
+\DB::table('logs')->where('id', $logId)->update([
+    'name_upper' => basename($closestUpper),
+    'name_side'  => basename($closestSide),
+    'updated_at' => now(), // 任意：更新日時も記録
+]);
+
+    // ZIP ダウンロード
+    if ($request->query('download') === 'zip') {
+        $zipFile = storage_path("app/tmp/pairs_{$logId}.zip");
+        if (!is_dir(dirname($zipFile))) {
+            mkdir(dirname($zipFile), 0777, true);
+        }
+
+        $zip = new ZipArchive;
+        if ($zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+            $zip->addFile($closestUpper, basename($closestUpper));
+            $zip->addFile($closestSide, basename($closestSide));
+            $zip->close();
+        } else {
+            LaravelLog::error('ZIP could not be created', ['zipFile' => $zipFile]);
+            abort(500, 'ZIPファイルの作成に失敗しました');
+        }
+
+        return response()->download($zipFile)->deleteFileAfterSend(true);
+    }
+
+    // HTML 表示用
+    return view('export_image', [
+        'upper' => basename($closestUpper),
+        'side'  => basename($closestSide),
+        'logId' => $logId,
+        'createdAt' => $logTimestamp,
+    ]);
 }
-    return response()->download($savePath_zip, basename($savePath_zip)) 
-                     ->deleteFileAfterSend(true);
+
+private function extractTimestamp(string $filename): int
+{
+    $base = basename($filename);
+    if (preg_match('/_(\d{6})_cam_id\d\.(jpg|png)$/', $base, $matches)) {
+        $timeStr = $matches[1]; // 093012
+        $h = substr($timeStr, 0, 2);
+        $m = substr($timeStr, 2, 2);
+        $s = substr($timeStr, 4, 2);
+
+        // 日付部分は固定ディレクトリ名から取得
+        if (preg_match('/(\d{4}_\d{2}_\d{2})/', $filename, $dateMatches)) {
+            $dateStr = str_replace('_', '-', $dateMatches[1]); // 2025_10_30 → 2025-10-30
+            return strtotime("$dateStr $h:$m:$s");
+        }
+    }
+    return 0;
 }
 
 }

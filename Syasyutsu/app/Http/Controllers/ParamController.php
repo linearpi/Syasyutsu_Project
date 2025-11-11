@@ -3,27 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Parameta;
+use App\Models\Param;
 use App\Models\Sample_log;
 use App\Models\Folder;
 
 use Illuminate\Support\Facades\DB;
 
-class ParametaController extends Controller
+class ParamController extends Controller
 {
 
 	public function search_all(Request $request){
-		$parameta = Parameta::paginate(10);
+		$params = Param::paginate(10);
 
 		$data = array(
 			"method" 	=> 	$request->method,
 			"q"		=>	$request->q,
-			"parametas"		=>	$parameta,
+			"params"		=>	$params,
 		);
 
 		//return $data;
 
-		return view("app/result_parameta",$data);
+		return view("app/result_param",$data);
 	}
 
 	public function search_name(Request $request){
@@ -33,16 +33,16 @@ class ParametaController extends Controller
 		]);
 
 
-		$parameta = Parameta::orWhere('name','like','%'.$request->q.'%')
+		$params = Param::orWhere('name','like','%'.$request->q.'%')
 		->paginate(10);  ;
 
 		$data = array(
 			"method" 	=> 	$request->method,
 			"q"		=>	$request->q,
-			"parametas"		=>	$parameta,
+			"params"		=>	$params,
 		);
 
-		return view('app/result_parameta',$data);
+		return view('app/result_params',$data);
 	}
 
 
@@ -55,17 +55,17 @@ class ParametaController extends Controller
 			'method' => 'required',
 		]);
 
-		$parametas = Parameta::whereDate('created_at',$request->q)->paginate(10);
+		$params = Param::whereDate('created_at',$request->q)->paginate(10);
 
 
 		$data = array(
 			"method" 	=> 	$request->method,
 			"q"		=>	$request->q,
-			"parametas"		=>	$parametas,
+			"params"		=>	$params,
 		);
 
 		//return $data;
-		return view('app/result_parameta',$data);
+		return view('app/result_param',$data);
 	}
 
 	public function search_active(Request $request){
@@ -75,7 +75,7 @@ class ParametaController extends Controller
 		]);
 
 
-		$parametas = Parameta::where('active',$request->q)->paginate(10);
+		$params = Param::where('active',$request->q)->paginate(10);
 
 		// if($request->q == 'active'){
 		// 	$parametas = Parameta::whereNotNull('active')->paginate(10);
@@ -87,10 +87,10 @@ class ParametaController extends Controller
 		$data = array(
 			"method" 	=> 	$request->method,
 			"q"		=>	$request->q,
-			"parametas"		=>	$parametas,
+			"params"		=>	$params,
 		);
 
-		return view('app/result_parameta',$data);
+		return view('app/result_param',$data);
 	}
 
 }

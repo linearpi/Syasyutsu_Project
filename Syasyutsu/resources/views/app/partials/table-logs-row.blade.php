@@ -1,5 +1,5 @@
 @php
-    // created_at 分解
+    // created_at 分解（既存のまま）
     $createdAt = (string)($log->created_at ?? '');
     $dt = $createdAt ? explode(' ', $createdAt) : [null, null];
     $datePart = $dt[0] ?? '';
@@ -9,21 +9,24 @@
     $month = $datePart ? (int)substr($datePart, 5, 2) : 0;
     $day   = $datePart ? (int)substr($datePart, 8, 2) : 0;
 
-    $datePath = ($year && $month && $day) ? "{$year}-{$month}-{$day}" : null;
+    // ルーティング用の日付（/image/{date}/... はハイフン区切り想定）
+    $datePath = ($year && $month && $day) ? sprintf('%04d-%02d-%02d', $year, $month, $day) : null;
+
+    // ファイル名のベース（アンダースコア区切り）
     $dateStr  = ($year && $month && $day)
-        ? sprintf("%04d_%02d_%02d_%s", $year, $month, $day, str_replace(':','',$timePart ?? ''))
+        ? sprintf("%04d_%02d_%02d_%s", $year, $month, $day, str_replace(':','', $timePart ?? ''))
         : null;
 
-    // 表示名補完
+    // 表示名補完（拡張子を含める前提）
     $displayParaName  = !empty($log->paraName)   ? $log->paraName   : $dateStr;
-    $displayNameUpper = !empty($log->name_upper) ? $log->name_upper : ($dateStr ? $dateStr.'_a' : null);
-    $displayNameSide  = !empty($log->name_side)  ? $log->name_side  : ($dateStr ? $dateStr.'_b' : null);
+    $displayNameUpper = !empty($log->name_upper) ? $log->name_upper : ($dateStr ? $dateStr.'_cam_id0.png' : null);
+    $displayNameSide  = !empty($log->name_side)  ? $log->name_side  : ($dateStr ? $dateStr.'_cam_id1.png' : null);
 
-    // 画像URL
+    // 画像URL（拡張子付きファイル名を渡す）
     $imageUrlUpper = ($displayNameUpper && $datePath)
-        ? route('image.serve', ['date'=>$datePath,'filename'=>$displayNameUpper]) : null;
+        ? route('image.serve', ['date' => $datePath, 'filename' => $displayNameUpper]) : null;
     $imageUrlSide  = ($displayNameSide && $datePath)
-        ? route('image.serve', ['date'=>$datePath,'filename'=>$displayNameSide])  : null;
+        ? route('image.serve', ['date' => $datePath, 'filename' => $displayNameSide])  : null;
 @endphp
 
 <tr id="row_{{ $log->id }}"
@@ -37,14 +40,14 @@
 
     <td>
         @if($displayParaName)
-            <form action="/search/parameta/name" method="GET">
+            <form action="/search/params/name" method="GET">
                 @csrf
                 <input type="hidden" name="q" value="{{ $displayParaName }}">
                 <input type="hidden" name="method" value="name" />
                 <input type="submit" value="この値で検索">
             </form>
         @else
-            <span style="color: gray;">—</span>
+            <span style="color: gray;">―</span>
         @endif
     </td>
 
@@ -79,8 +82,9 @@
     </td>
 
 <td class="image-dl">
-    <form method="get" action="{{ route('export/image') }}">
+    <form method="get" action="{{ route('export.image') }}">
         <input type="hidden" name="log_id" value="{{ $log->id }}" />
+        <input type="hidden" name="download" value="zip" />
         <div style="max-width: 145px;">
             <input type="submit" value="画像ダウンロード" style="width: 100%; padding: 5px;">
         </div>

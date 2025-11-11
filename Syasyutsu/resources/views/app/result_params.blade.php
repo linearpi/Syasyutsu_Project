@@ -35,9 +35,9 @@
     @break
 @endswitch
 
-<p>{{ $parametas->total() }}件中
+<p>{{ $params->total() }}件中
 @php
-    echo count($parametas) ."件表示</p>"
+    echo count($params) ."件表示</p>"
 @endphp
 
 <div class="content1 w3-display-container">
@@ -59,22 +59,22 @@
         </thead>
 
         <tbody>
-        @if(!isset($parametas[0]))
+        @if(!isset($params[0]))
             <tr>
                 <td colspan="9">NO DATA EXISTS!!</td>
             </tr>
         @else
-            @foreach($parametas as $parameta)
+            @foreach($params as $param)
                 <tr>
-                    <td>{{$parameta["id"]}}</td>
-                    <td>{{$parameta["name"]}}</td>
-                    <td>{{$parameta["thresh"]}}</td>
-                    <td>{{$parameta["width"]}}</td>
-                    <td>{{$parameta["length"]}}</td>
-                    <td>{{$parameta["height"]}}</td>
-                    <td>{{$parameta["created_at"]}}</td>
+                    <td>{{$param["id"]}}</td>
+                    <td>{{$param["name"]}}</td>
+                    <td>{{$param["thresh"]}}</td>
+                    <td>{{$param["width"]}}</td>
+                    <td>{{$param["length"]}}</td>
+                    <td>{{$param["height"]}}</td>
+                    <td>{{$param["created_at"]}}</td>
                     <td>
-                        @if($parameta["active"] == null)
+                        @if($param["active"] == null)
                             <p style="color: blue">INACTIVE</p>
                         @else
                             <p style="color: red">ACTIVE</p>
@@ -95,7 +95,7 @@
 </div>
 </div>
 
-{{ $parametas->appends(request()->query())->links()}}
+{{ $params->appends(request()->query())->links()}}
 
 @endsection
 
