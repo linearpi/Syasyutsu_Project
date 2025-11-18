@@ -3,8 +3,8 @@
         @if(isset($logs))
             <p>ログ：{{ $logs->total() }}件中 {{ $logs->count() }}件表示</p>
         @endif
-        @if(isset($parametas))
-            <p>パラメータ：{{ $parametas->total() }}件中 {{ $parametas->count() }}件表示</p>
+        @if(isset($params))
+            <p>パラメータ：{{ $params->total() }}件中 {{ $params->count() }}件表示</p>
         @endif
     </div>
 
@@ -17,7 +17,7 @@
     </h4>
 
     <div class="scroll-area">
-        @if((isset($logs) && $logs->count()) || (isset($parametas) && $parametas->count()))
+        @if((isset($logs) && $logs->count()) || (isset($params) && $params->count()))
             <table border="1" style="width:100%; min-width:900px; border-collapse: collapse; table-layout: fixed;">
                 <thead>
                     <tr>
@@ -34,7 +34,7 @@
                 </thead>
                 <tbody>
                     @includeWhen(isset($logs) && $logs->count(), 'app.partials.table-all-logs')
-                    @includeWhen(isset($parametas) && $parametas->count(), 'app.partials.table-all-params')
+                    @includeWhen(isset($params) && $params->count(), 'app.partials.table-all-params')
                 </tbody>
             </table>
         @else

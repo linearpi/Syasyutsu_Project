@@ -46,14 +46,14 @@ class CombinedController extends Controller
                    ->orderBy('id','desc')
                    ->paginate(10);
 
-        $parametas = Parameta::where('name','like','%'.$request->q.'%')
+        $params = Param::where('name','like','%'.$request->q.'%')
                               ->paginate(10);
 
         return view('app/result_combined', [
             'method' => 'paraName',
             'q' => $request->q,
             'logs' => $logs,
-            'parametas' => $parametas
+            'params' => $params
         ]);
     }
 
@@ -71,14 +71,14 @@ class CombinedController extends Controller
                    ->orderBy('id','desc')
                    ->paginate(10);
 
-        $parametas = Parameta::whereDate('created_at',$request->q)
+        $params = Param::whereDate('created_at',$request->q)
                               ->paginate(10);
 
         return view('app/result_combined', [
             'method' => 'date',
             'q' => $request->q,
             'logs' => $logs,
-            'parametas' => $parametas
+            'params' => $params
         ]);
     }
 
@@ -109,14 +109,14 @@ class CombinedController extends Controller
                    ->paginate(10);
 
         // パラメータは日付範囲を考慮しない場合は全件
-        $parametas = Parameta::paginate(10);
+        $params = Param::paginate(10);
 
         return view('app/result_combined', [
             'method' => 'range',
             'q1' => $request->q1,
             'q2' => $request->q2,
             'logs' => $logs,
-            'parametas' => $parametas
+            'params' => $params
         ]);
     }
 
@@ -131,20 +131,22 @@ class CombinedController extends Controller
 		['q.required' => '良否を選択してください。']
 	);
 
-        $parameta = $request->q === "1" ? 1 : 0;
+        $param = $request->q === "1" ? 1 : 0;
 
-        $logs = Log::where('judgment', $parameta)
+        $label = $param === 1 ? "良品" : "不良品";
+
+        $logs = Log::where('judgment', $param)
                    ->orderBy('id','asc')
                    ->paginate(10);
 
         // Parameta は ACTIVE 状態を表示
-        $parametas = Parameta::paginate(10);
+        $params = Param::paginate(10);
 
         return view('app/result_combined', [
             'method' => 'judgment',
-            'q' => $request->q,
+            'q' => $label,
             'logs' => $logs,
-            'parametas' => $parametas
+            'params' => $params
         ]);
     }
 
@@ -158,17 +160,21 @@ class CombinedController extends Controller
 		['q.required' => '可否を選択してください。']
 	);
 
-        $parametas = Parameta::where('active', $request->q)
+        $isActive = $request->q === "1" ? 1 : 0;
+
+        $params = Param::where('is_active', $request->q)
                               ->paginate(10);
+
+        $label = $isActive === 1 ? "有効" : "無効";
 
         // logs は全件表示
         $logs = Log::orderBy('id','desc')->paginate(10);
 
         return view('app/result_combined', [
             'method' => 'active',
-            'q' => $request->q,
+            'q' => $label,
             'logs' => $logs,
-            'parametas' => $parametas
+            'params' => $params
         ]);
     }
 }

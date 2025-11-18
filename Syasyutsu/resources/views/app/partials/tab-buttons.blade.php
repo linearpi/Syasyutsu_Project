@@ -3,7 +3,7 @@
     @if(isset($logs))
         <button class="tab-btn" data-tab="logs">ログ結果</button>
     @endif
-    @if(isset($parametas) && count($parametas) > 0)
+    @if(isset($params) && count($params) > 0)
         <button class="tab-btn" data-tab="params">パラメータ結果</button>
     @endif
 </div>

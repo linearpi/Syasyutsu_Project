@@ -83,15 +83,15 @@
             </td>
         </tr>
 
-        <!-- ACTIVE検索 -->
+        <!-- 状態検索 -->
         <tr class="search-row">
-            <th class="search-headder">ACTIVE検索</th>
+            <th class="search-headder">状態検索</th>
             <td class="search-cell w3-display-container">
                 <form action="/search/combined/active" method="GET">
                     @csrf
-                    <label for="active">ACTIVE</label>
+                    <label for="active">有効</label>
                     <input type="radio" name="q" id="active" value="1"/>
-                    <label for="inactive">INACTIVE</label>
+                    <label for="inactive">無効</label>
                     <input type="radio" name="q" id="inactive" value="0"/>
                     <input class="w3-display-right search-button" type="submit" value="送信" />
                 </form>
