@@ -23,7 +23,7 @@
     @include('app.partials.tab-buttons')
     @include('app.partials.table-all')
     @includeWhen(isset($logs), 'app.partials.table-logs')
-    @includeWhen(isset($params) && count($params) > 0, 'app.partials.table-params')
+    @includeWhen(isset($params), 'app.partials.table-params')
     @include('app.partials.tab-scripts')
 @endsection
 
