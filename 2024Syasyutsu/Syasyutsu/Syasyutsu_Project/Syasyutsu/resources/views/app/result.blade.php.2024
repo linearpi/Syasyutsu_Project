@@ -93,7 +93,6 @@
 
 		@else
 		@foreach($logs as $log)
-
 			<tr>
 				<td>{{$log["id"]}}</td>
 				<td>{{$log["name_upper"]}}</td>
@@ -116,73 +115,67 @@
 						<td style="background-color: red;">不</td>
 					@endif
 				<td>{{$log["year"]}}/{{$log["month"]}}/{{$log["day"]}}_{{$log["time"]}}</td>
-<td>
-    <div id='{{ $log["id"] }}_img_upper'>
-        <a href="http://192.168.50.155/image/{{ $log['year'] }}-{{ $log['month'] }}-{{ $log['day'] }}/{{ $log['name_upper'] }}" 
-           data-lightbox="abc" data-title="{{ $log['name'] }}">
-            <img src="http://192.168.50.155/image/{{ $log['year'] }}-{{ $log['month'] }}-{{ $log['day'] }}/{{ $log['name_upper'] }}" 
-                 width="60px" alt="none">
-        </a>
-    </div>
-</td>
-<td>
-    <div id='{{ $log["id"] }}_img_side'>
-        <a href="http://192.168.50.155/image/{{ $log['year'] }}-{{ $log['month'] }}-{{ $log['day'] }}/{{ $log['name_side'] }}" 
-           data-lightbox="abc" data-title="{{ $log['name'] }}">
-            <img src="http://192.168.50.155/image/{{ $log['year'] }}-{{ $log['month'] }}-{{ $log['day'] }}/{{ $log['name_side'] }}" 
-                 width="60px" alt="none">
-        </a>
-    </div>
-</td>
-<div>
-    <script>
-        function chk(url) {
-            return new Promise(function (resolve, reject) {
-                const img = new Image();
-                let timer;
+				<td>
+					<div id='{{ $log["id"] }}_img_upper'>
+						<a href="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.png" data-lightbox="abc" data-title="{{ $log['name'] }}">
+							<img src="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.png" width="60px" alt="none">
+						</a>
+					</div>
+				</td>
+				<td>
+					<div id='{{ $log["id"] }}_img_side'>
+						<a href="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_side'] }}.png" data-lightbox="abc" data-title="{{ $log['name'] }}">
+							<img src="http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_side'] }}.png" width="60px" alt="none">
+						</a>
+					</div>
+				</td>
+				<div>
+					<script>
+						//NAS内部の画像を探し、無い場合はダウンロード不可とする。
+						function chk(url) {
+							return new Promise(function (resolve, reject) {
+								const img = new Image();
+								let timer;
+								
+								// タイムアウトを設定（例えば5秒）
+								const timeout = new Promise((_, reject) => {
+									timer = setTimeout(() => {
+										reject(new Error("Timeout"));
+									}, 1000); // 100ミリ秒（0.1秒）
+								});
 
-                const timeout = new Promise((_, reject) => {
-                    timer = setTimeout(() => {
-                        reject(new Error("Timeout"));
-                    }, 1000);
-                });
+								img.src = url;
+								img.onload = function () {
+									clearTimeout(timer); // タイムアウトのクリア
+									resolve(url);
+								};
+								img.onerror = function () {
+									clearTimeout(timer); // タイムアウトのクリア
+									reject(url);
+								};
 
-                img.src = url;
-                img.onload = function () {
-                    clearTimeout(timer);
-                    resolve(url);
-                };
-                img.onerror = function () {
-                    clearTimeout(timer);
-                    reject(url);
-                };
+								// imgのロードとタイムアウトの競合
+								Promise.race([timeout, new Promise((resolve, reject) => {
+									img.onload = function () { resolve(url); };
+									img.onerror = function () { reject(url); };
+								})]).then(resolve).catch(reject);
+							});
+						}
 
-                Promise.race([
-                    timeout,
-                    new Promise((resolve, reject) => {
-                        img.onload = function () { resolve(url); };
-                        img.onerror = function () { reject(url); };
-                    })
-                ]).then(resolve).catch(reject);
-            });
-        }
+						chk("http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_upper'] }}.png")
+							.catch((url) => {
+								document.getElementById('{{ $log["id"] }}_img_upper').innerHTML = "none";
+								document.getElementById('{{ $log["id"] }}').innerHTML = "ダウンロード不可";
+							});
 
-        chk("http://192.168.50.155/image/{{ $log['year'] }}-{{ $log['month'] }}-{{ $log['day'] }}/{{ $log['name_upper'] }}")
-            .catch((url) => {
-                document.getElementById('{{ $log["id"] }}_img_upper').innerHTML = "none";
-                document.getElementById('{{ $log["id"] }}').innerHTML = "ダウンロード不可";
-            });
+						chk("http://192.168.11.13/nas/pictures/{{ $log['year'] }}_{{ $log['month'] }}_{{ $log['day'] }}/{{ $log['name_side'] }}.png")
+							.catch((url) => {
+								document.getElementById('{{ $log["id"] }}_img_side').innerHTML = "none";
+								document.getElementById('{{ $log["id"] }}').innerHTML = "ダウンロード不可";
+							});
 
-        chk("http://192.168.50.155/image/{{ $log['year'] }}-{{ $log['month'] }}-{{ $log['day'] }}/{{ $log['name_side'] }}")
-            .catch((url) => {
-                document.getElementById('{{ $log["id"] }}_img_side').innerHTML = "none";
-                document.getElementById('{{ $log["id"] }}').innerHTML = "ダウンロード不可";
-            });
-    </script>
-</div>
-
-
-
+					</script>
+				</div>
 				<td>
 					<form method="get" action="{{ route('export/image') }}">
 						<input type="hidden" name="log" value="{{ $log }}" />

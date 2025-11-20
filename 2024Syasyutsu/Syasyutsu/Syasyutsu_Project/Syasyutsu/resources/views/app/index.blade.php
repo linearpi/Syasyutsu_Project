@@ -53,5 +53,4 @@
 			<p>作成日　2024/12/4(水)&emsp;</p>
 		</div>
 	</div>
-<a href="http://192.168.50.155:80" target="_blank">🆕 新バージョンへ</a>
 @endsection

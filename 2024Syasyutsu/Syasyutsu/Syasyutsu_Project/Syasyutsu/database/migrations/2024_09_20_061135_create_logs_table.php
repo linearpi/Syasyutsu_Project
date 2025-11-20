@@ -16,12 +16,11 @@ return new class extends Migration
 		$table->text("name_upper");
         $table->text("name_side");
 		$table->text("paraName");
-    $table->unsignedBigInteger('parameta_id')->nullable();
 		$table->float("width");
         $table->float("length");
         $table->float("height");
 		$table->boolean("judgment");
-        $table->string('created_label')->nullable();
+        $table->timestamp('created_at');
         $table->integer("year");
         $table->integer("month");
         $table->integer("day");
