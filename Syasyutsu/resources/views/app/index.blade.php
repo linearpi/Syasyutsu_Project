@@ -59,5 +59,6 @@ window.addEventListener('error', (e) => {
   }
 });
 </script>
+<br>
 <a href="http://192.168.50.155:8080" class="back-link">🔁 旧バージョンへ</a><br>
 @endsection

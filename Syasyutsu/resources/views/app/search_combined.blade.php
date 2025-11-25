@@ -13,6 +13,11 @@
         </a>
     </div>
 </div>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Tippy CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
 @endsection
 
 @section('main')
@@ -85,7 +90,9 @@
 
         <!-- 状態検索 -->
         <tr class="search-row">
-            <th class="search-headder">状態検索</th>
+            <th class="search-headder">状態検索(パラメータ)
+<i class="bi bi-info-circle" data-tippy-content="パラメータ状態を検索します"></i>
+</th>
             <td class="search-cell w3-display-container">
                 <form action="/search/combined/active" method="GET">
                     @csrf
@@ -110,6 +117,14 @@
     </ul>
 </div>
 @endif
+
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        tippy('[data-tippy-content]');
+    });
+</script>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {

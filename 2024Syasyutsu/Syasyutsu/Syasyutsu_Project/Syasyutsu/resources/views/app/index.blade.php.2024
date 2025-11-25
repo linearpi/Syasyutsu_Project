@@ -54,8 +54,3 @@
 		</div>
 	</div>
 @endsection
-
-@section('script')
-<br>
-<a href="http://192.168.50.155:8000" class="back-link">🔁 現バージョンへ</a><br>
-@endsection

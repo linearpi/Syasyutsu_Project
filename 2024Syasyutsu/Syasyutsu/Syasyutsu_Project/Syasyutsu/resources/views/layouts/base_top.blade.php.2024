@@ -15,8 +15,6 @@
         @yield("main")
     </div>
 
-        @yield("script")
-
     <div class="footer">
         @yield("footer")
     </div>
