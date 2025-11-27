@@ -21,7 +21,7 @@ class CombinedController extends Controller
      */
     public function search_all(Request $request)
     {
-        $logs = Log::orderBy('id','asc')->paginate(10);
+        $logs = Log::orderBy('id','desc')->paginate(10);
         $params = Param::paginate(10);
 
         return view('app/result_combined', [
@@ -136,7 +136,7 @@ class CombinedController extends Controller
         $label = $param === 1 ? "良品" : "不良品";
 
         $logs = Log::where('judgment', $param)
-                   ->orderBy('id','asc')
+                   ->orderBy('id','desc')
                    ->paginate(10);
 
         // Parameta は ACTIVE 状態を表示
